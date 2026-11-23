@@ -62,7 +62,7 @@
     .clamp-3 { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
     .clamp-4 { display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
 
-    /* Animaciones de letras, tarjetas y gráficos */
+    /* Animaciones de letras, tarjetas, imágenes y gráficos */
     @keyframes letterPop {
       0% { opacity: 0; transform: translateY(16px) scale(0.96); filter: blur(3px); }
       100% { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
@@ -90,7 +90,11 @@
     }
     @keyframes floatSoft {
       0%, 100% { transform: translateY(0px); }
-      50% { transform: translateY(-5px); }
+      50% { transform: translateY(-6px); }
+    }
+    @keyframes visualReveal {
+      0% { opacity: 0; transform: scale(0.93) translateY(12px); }
+      100% { opacity: 1; transform: scale(1) translateY(0); }
     }
 
     .anim-text {
@@ -102,6 +106,11 @@
       opacity: 0;
       animation: cardEntrance 0.58s cubic-bezier(0.22, 1, 0.36, 1) forwards;
       animation-delay: var(--delay, 120ms);
+    }
+    .anim-visual {
+      opacity: 0;
+      animation: visualReveal 0.65s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+      animation-delay: var(--delay, 160ms);
     }
     .anim-svg-bar {
       transform-box: fill-box;
@@ -125,7 +134,6 @@
     .trans-fade  { animation: letterPop 0.48s ease-out; }
     .trans-rise  { animation: cardEntrance 0.48s ease-out; }
 
-    /* Estilos de impresión / PDF sin animaciones congeladas */
     @media print {
       body * { visibility: hidden; }
       #printContainer, #printContainer * {
@@ -162,7 +170,7 @@
       </div>
       <div>
         <h1 class="text-base font-extrabold tracking-tight text-white leading-none">SlideCraft AI</h1>
-        <p class="text-[11px] text-slate-400 mt-0.5">Estudio Dinámico de Presentaciones</p>
+        <p class="text-[11px] text-slate-400 mt-0.5">Estudio Visual de Presentaciones</p>
       </div>
     </div>
 
@@ -206,7 +214,7 @@
             <i data-lucide="sliders" class="w-4 h-4"></i> Parámetros de la Presentación
           </h2>
           <span id="apiStatusBadge" class="text-[11px] px-2.5 py-0.5 rounded-full bg-slate-800 text-slate-400 border border-slate-700">
-            Motor Inteligente Local
+            Motor Visual Local
           </span>
         </div>
 
@@ -276,7 +284,7 @@
         <button id="generateBtn" onclick="generateDeck()"
           class="w-full py-3 rounded-xl bg-gradient-to-r from-sky-500 via-indigo-500 to-violet-600 hover:from-sky-400 hover:to-violet-500 font-bold text-sm text-white shadow-lg shadow-sky-600/25 flex items-center justify-center gap-2 transition active:scale-[0.99]">
           <i data-lucide="sparkles" class="w-4 h-4"></i>
-          <span>Generar y Guardar Presentación</span>
+          <span>Generar Presentación con Imágenes y Gráficos</span>
         </button>
       </section>
 
@@ -371,15 +379,15 @@
         </h3>
         <button onclick="closeExportModal()" class="text-slate-400 hover:text-white"><i data-lucide="x" class="w-5 h-5"></i></button>
       </div>
-      <p class="text-xs text-slate-400">Elige el formato y selecciona la carpeta de destino en tu dispositivo.</p>
+      <p class="text-xs text-slate-400">Exporta conservando imágenes temáticas, iconos, gráficos y estructura idéntica al diseño original.</p>
 
       <div class="space-y-2.5">
         <button onclick="exportToPPTX()" class="w-full p-3.5 rounded-xl bg-slate-800 hover:bg-slate-750 border border-slate-700 hover:border-sky-500 flex items-center justify-between text-left transition">
           <div class="flex items-center gap-3">
             <div class="w-10 h-10 rounded-lg bg-orange-500/20 text-orange-400 flex items-center justify-center font-bold text-xs">PPTX</div>
             <div>
-              <div class="text-sm font-bold text-white">PowerPoint Editable (.pptx)</div>
-              <div class="text-[11px] text-slate-400">Elegir carpeta y guardar archivo de presentación</div>
+              <div class="text-sm font-bold text-white">PowerPoint Fiel (.pptx)</div>
+              <div class="text-[11px] text-slate-400">Con ilustraciones, gráficos y textos editables</div>
             </div>
           </div>
           <i data-lucide="chevron-right" class="w-4 h-4 text-slate-400"></i>
@@ -389,8 +397,8 @@
           <div class="flex items-center gap-3">
             <div class="w-10 h-10 rounded-lg bg-sky-500/20 text-sky-400 flex items-center justify-center font-bold text-xs">HTML</div>
             <div>
-              <div class="text-sm font-bold text-white">Presentación Web Animada (.html)</div>
-              <div class="text-[11px] text-slate-400">Con animaciones escalonadas y gráficos SVG</div>
+              <div class="text-sm font-bold text-white">Presentación Web Idéntica (.html)</div>
+              <div class="text-[11px] text-slate-400">Misma estética, imágenes, iconos y animaciones</div>
             </div>
           </div>
           <i data-lucide="chevron-right" class="w-4 h-4 text-slate-400"></i>
@@ -420,7 +428,7 @@
         <button onclick="closeSettingsModal()" class="text-slate-400 hover:text-white"><i data-lucide="x" class="w-5 h-5"></i></button>
       </div>
       <p class="text-xs text-slate-300 leading-relaxed">
-        Ingresa tu <strong>API Key de Google Gemini</strong> (opcional) para generar contenido profundo adaptado a cada tema. Sin clave, la app usa su motor inteligente local con gráficos variados.
+        Ingresa tu <strong>API Key de Google Gemini</strong> (opcional) para generar contenido profundo adaptado a cada tema. Sin clave, la app usa su motor visual local.
       </p>
       <input id="apiKeyInput" type="password" placeholder="AIzaSy..."
         class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm text-white outline-none focus:border-sky-500" />
@@ -565,7 +573,7 @@
         badge.textContent = 'Gemini AI Conectado';
         badge.className = 'text-[11px] px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40';
       } else {
-        badge.textContent = 'Motor Inteligente Local';
+        badge.textContent = 'Motor Visual Local';
         badge.className = 'text-[11px] px-2.5 py-0.5 rounded-full bg-slate-800 text-slate-400 border border-slate-700';
       }
     }
@@ -627,7 +635,6 @@
       }
     }
 
-    // Gestión de Biblioteca Guardada en localStorage
     function getSavedDecks() {
       try {
         const raw = localStorage.getItem(STORAGE_KEY_DECKS);
@@ -781,7 +788,6 @@
       lucide.createIcons();
     }
 
-    // Generación con Gemini API o Motor Inteligente Local Variado
     async function generateDeck() {
       const topic = document.getElementById('topicInput').value.trim();
       const context = document.getElementById('contextInput').value.trim();
@@ -799,7 +805,7 @@
 
       const btn = document.getElementById('generateBtn');
       btn.disabled = true;
-      btn.innerHTML = `<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i><span>Construyendo diapositivas y gráficos...</span>`;
+      btn.innerHTML = `<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i><span>Generando imágenes, gráficos y diapositivas...</span>`;
       lucide.createIcons();
 
       const apiKey = localStorage.getItem(STORAGE_KEY_API);
@@ -848,10 +854,10 @@
         document.getElementById('workspaceSection').classList.remove('hidden');
         renderCurrentSlide();
         setTimeout(scaleAllStages, 50);
-        showToast('Generada con motor local adaptado al tema');
+        showToast('Generada con motor visual local');
       } finally {
         btn.disabled = false;
-        btn.innerHTML = `<i data-lucide="sparkles" class="w-4 h-4"></i><span>Generar y Guardar Presentación</span>`;
+        btn.innerHTML = `<i data-lucide="sparkles" class="w-4 h-4"></i><span>Generar Presentación con Imágenes y Gráficos</span>`;
         lucide.createIcons();
       }
     }
@@ -869,7 +875,7 @@ Devuelve ÚNICAMENTE JSON válido con esta estructura:
   "title": "Título corto",
   "slides": [
     {
-      "layout": "cover | stats_bar | funnel | gauges | trend_area | quote_focus | donut | timeline | closing",
+      "layout": "cover | visual_story | stats_bar | funnel | gauges | trend_area | quote_focus | donut | timeline | closing",
       "tag": "Etiqueta corta (máx 22 chars)",
       "title": "Título de slide (máx 56 chars)",
       "subtitle": "Subtítulo claro (máx 110 chars)",
@@ -879,7 +885,7 @@ Devuelve ÚNICAMENTE JSON válido con esta estructura:
     }
   ]
 }
-Usa variedad de layouts ("cover", "funnel", "gauges", "trend_area", "stats_bar", "donut", "timeline", "closing"), iconos válidos de Lucide y valores numéricos "num" entre 15 y 95.`;
+Incluye "visual_story" y variedad de layouts ("cover", "visual_story", "funnel", "gauges", "trend_area", "stats_bar", "donut", "timeline", "closing"), iconos válidos de Lucide y valores numéricos "num" entre 15 y 95.`;
 
       const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${encodeURIComponent(apiKey)}`, {
         method: 'POST',
@@ -906,17 +912,28 @@ Usa variedad de layouts ("cover", "funnel", "gauges", "trend_area", "stats_bar",
         tech: {
           tagCover: 'ARQUITECTURA E INNOVACIÓN',
           s2: {
+            layout: 'visual_story',
+            tag: 'ESCENARIO TECNOLÓGICO',
+            title: `Transformación Digital: ${shortTopic}`,
+            subtitle: 'Integración de sistemas inteligentes, flujos automatizados y datos confiables.',
+            items: [
+              { label: 'Arquitectura Modular', value: 'Componentes conectados con baja fricción y alta trazabilidad.', num: 88, icon: ic[0] },
+              { label: 'Automatización Activa', value: 'Flujos repetitivos resueltos con supervisión y control.', num: 82, icon: ic[1] },
+              { label: 'Decisión Basada en Datos', value: 'Métricas en tiempo real para mejorar el rendimiento.', num: 90, icon: ic[5] }
+            ]
+          },
+          s3: {
             layout: 'gauges',
             tag: 'CAPACIDAD DEL SISTEMA',
-            title: `Madurez Técnica: ${shortTopic}`,
-            subtitle: 'Evaluación de rendimiento, automatización y escalabilidad operativa.',
+            title: 'Indicadores de Madurez Técnica',
+            subtitle: 'Evaluación de rendimiento, escalabilidad y continuidad operativa.',
             items: [
               { label: 'Automatización', value: 'Reducción de tareas manuales repetitivas', num: 86, icon: ic[0] },
               { label: 'Escalabilidad', value: 'Soporte ante crecimiento de demanda', num: 78, icon: ic[1] },
               { label: 'Confiabilidad', value: 'Estabilidad y continuidad del servicio', num: 92, icon: ic[2] }
             ]
           },
-          s3: {
+          s4: {
             layout: 'trend_area',
             tag: 'CURVA DE ADOPCIÓN',
             title: 'Evolución del Impacto Operativo',
@@ -932,17 +949,28 @@ Usa variedad de layouts ("cover", "funnel", "gauges", "trend_area", "stats_bar",
         education: {
           tagCover: 'FORMACIÓN Y BIENESTAR',
           s2: {
-            layout: 'quote_focus',
-            tag: 'PRINCIPIO CENTRAL',
-            title: `Enfoque Humano en ${shortTopic}`,
-            subtitle: 'El aprendizaje y el bienestar florecen cuando el propósito, el acompañamiento y la claridad se unen.',
+            layout: 'visual_story',
+            tag: 'ENTORNO FORMATIVO',
+            title: `Acompañamiento Integral: ${shortTopic}`,
+            subtitle: 'Uniendo claridad conceptual, cercanía humana y aplicación práctica.',
             items: [
-              { label: 'Comprensión Activa', value: 'Conectar conceptos clave con experiencias reales y prácticas.', num: 88, icon: ic[0] },
-              { label: 'Acompañamiento', value: 'Seguimiento cercano para fortalecer cada etapa del proceso.', num: 84, icon: ic[4] },
-              { label: 'Resultados Duraderos', value: 'Hábitos y competencias sostenibles más allá del aula o sesión.', num: 90, icon: ic[5] }
+              { label: 'Comprensión Activa', value: 'Conectar ideas clave con experiencias reales y prácticas.', num: 88, icon: ic[0] },
+              { label: 'Acompañamiento Cercano', value: 'Seguimiento humano para fortalecer cada etapa del proceso.', num: 84, icon: ic[4] },
+              { label: 'Hábitos Duraderos', value: 'Aprendizajes que se sostienen en la práctica cotidiana.', num: 90, icon: ic[5] }
             ]
           },
           s3: {
+            layout: 'quote_focus',
+            tag: 'PRINCIPIO CENTRAL',
+            title: 'El Valor del Propósito Compartido',
+            subtitle: 'El crecimiento real ocurre cuando el conocimiento se vuelve práctica con sentido.',
+            items: [
+              { label: 'Claridad Pedagógica', value: 'Mensajes ordenados, accesibles y orientados a la acción.', num: 89, icon: ic[0] },
+              { label: 'Bienestar y Cuidado', value: 'Entorno respetuoso que impulsa seguridad y confianza.', num: 91, icon: ic[1] },
+              { label: 'Evaluación Formativa', value: 'Retroalimentación oportuna para mejorar continuamente.', num: 83, icon: ic[2] }
+            ]
+          },
+          s4: {
             layout: 'stats_bar',
             tag: 'INDICADORES FORMATIVOS',
             title: 'Avance en Comprensión y Práctica',
@@ -970,6 +998,17 @@ Usa variedad de layouts ("cover", "funnel", "gauges", "trend_area", "stats_bar",
             ]
           },
           s3: {
+            layout: 'visual_story',
+            tag: 'PROPUESTA DE VALOR',
+            title: 'Conexión Genuina con la Audiencia',
+            subtitle: 'Mensajes claros, ofertas relevantes y seguimiento constante.',
+            items: [
+              { label: 'Mensaje Enfocado', value: 'Hablar directo a la necesidad real del público.', num: 90, icon: ic[0] },
+              { label: 'Prueba y Confianza', value: 'Evidencia clara que respalda cada promesa.', num: 84, icon: ic[3] },
+              { label: 'Crecimiento Sostenido', value: 'Conversión recurrente con menor costo de adquisición.', num: 78, icon: ic[2] }
+            ]
+          },
+          s4: {
             layout: 'donut',
             tag: 'INVERSIÓN POR CANAL',
             title: 'Distribución Estratégica de Esfuerzos',
@@ -995,6 +1034,17 @@ Usa variedad de layouts ("cover", "funnel", "gauges", "trend_area", "stats_bar",
             ]
           },
           s3: {
+            layout: 'visual_story',
+            tag: 'CULTURA Y SERVICIO',
+            title: 'Liderazgo que Ordena e Inspira',
+            subtitle: 'Dirección firme con empatía, estructura y visión de largo plazo.',
+            items: [
+              { label: 'Escucha y Criterio', value: 'Decisiones ponderadas que consideran el contexto real.', num: 87, icon: ic[2] },
+              { label: 'Estructura Clara', value: 'Roles definidos que evitan ambigüedad y desgaste.', num: 84, icon: ic[0] },
+              { label: 'Legado Sostenible', value: 'Principios vivos que trascienden una sola etapa.', num: 92, icon: ic[4] }
+            ]
+          },
+          s4: {
             layout: 'trend_area',
             tag: 'CONSOLIDACIÓN CULTURAL',
             title: 'Crecimiento Sostenido de Cohesión',
@@ -1010,9 +1060,20 @@ Usa variedad de layouts ("cover", "funnel", "gauges", "trend_area", "stats_bar",
         business: {
           tagCover: 'PLAN ESTRATÉGICO',
           s2: {
+            layout: 'visual_story',
+            tag: 'VISIÓN ESTRATÉGICA',
+            title: `Eje Central: ${shortTopic}`,
+            subtitle: 'Alineación entre diagnóstico objetivo, ejecución disciplinada y resultados.',
+            items: [
+              { label: 'Diagnóstico Preciso', value: 'Identificar puntos de palanca y cuellos de botella reales.', num: 85, icon: ic[0] },
+              { label: 'Ejecución Disciplinada', value: 'Convertir planes en acciones verificables con responsables.', num: 88, icon: ic[2] },
+              { label: 'Sostenibilidad', value: 'Asegurar impacto duradero sin comprometer recursos.', num: 82, icon: ic[3] }
+            ]
+          },
+          s3: {
             layout: 'stats_bar',
             tag: 'MÉTRICAS DE DESEMPEÑO',
-            title: `Indicadores Clave: ${shortTopic}`,
+            title: 'Indicadores Clave de Desempeño',
             subtitle: 'Medición objetiva del avance y retorno sobre la iniciativa.',
             items: [
               { label: 'Eficiencia Operativa', value: 'Optimización de tiempos y recursos asignados', num: 84, icon: ic[1] },
@@ -1021,7 +1082,7 @@ Usa variedad de layouts ("cover", "funnel", "gauges", "trend_area", "stats_bar",
               { label: 'Valor Generado', value: 'Impacto directo en el propósito establecido', num: 82, icon: ic[4] }
             ]
           },
-          s3: {
+          s4: {
             layout: 'funnel',
             tag: 'PRIORIZACIÓN EJECUTIVA',
             title: 'Filtro de Iniciativas de Alto Impacto',
@@ -1052,6 +1113,7 @@ Usa variedad de layouts ("cover", "funnel", "gauges", "trend_area", "stats_bar",
         },
         pack.s2,
         pack.s3,
+        pack.s4,
         {
           layout: 'timeline',
           tag: 'HOJA DE RUTA',
@@ -1111,6 +1173,113 @@ Usa variedad de layouts ("cover", "funnel", "gauges", "trend_area", "stats_bar",
       }
 
       return { title: topic, slides: slides.slice(0, count) };
+    }
+
+    // Ilustraciones Vectoriales Temáticas SVG según el Dominio y el Contenido
+    function buildTopicIllustrationSVG(domain, layout, theme) {
+      const a1 = theme.accent;
+      const a2 = theme.accent2;
+      const card = theme.card;
+      const txt = theme.text;
+      const mut = theme.muted;
+
+      if (domain === 'tech') {
+        return `
+          <svg viewBox="0 0 380 280" class="w-full h-full anim-visual" style="--delay:160ms;">
+            <defs>
+              <linearGradient id="techGrad" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="${a1}" stop-opacity="0.28"/>
+                <stop offset="100%" stop-color="${a2}" stop-opacity="0.12"/>
+              </linearGradient>
+            </defs>
+            <rect x="24" y="24" width="332" height="232" rx="20" fill="url(#techGrad)" stroke="${a1}" stroke-opacity="0.35" stroke-width="1.5"/>
+            <!-- Nodos de red / arquitectura -->
+            <line x1="95" y1="90" x2="190" y2="140" stroke="${a1}" stroke-width="2.5" stroke-dasharray="6 4" class="anim-svg-stroke" style="--dash-len:220;--dash-target:0;--delay:220ms;"/>
+            <line x1="285" y1="90" x2="190" y2="140" stroke="${a2}" stroke-width="2.5" stroke-dasharray="6 4" class="anim-svg-stroke" style="--dash-len:220;--dash-target:0;--delay:260ms;"/>
+            <line x1="190" y1="140" x2="190" y2="205" stroke="${a1}" stroke-width="2.5" class="anim-svg-stroke" style="--dash-len:120;--dash-target:0;--delay:300ms;"/>
+            <!-- Núcleo central -->
+            <circle cx="190" cy="140" r="34" fill="${card}" stroke="${a1}" stroke-width="3" class="anim-float"/>
+            <rect x="176" y="126" width="28" height="28" rx="6" fill="${a1}" opacity="0.22"/>
+            <circle cx="190" cy="140" r="8" fill="${a1}"/>
+            <!-- Nodos periféricos -->
+            <rect x="55" y="62" width="80" height="44" rx="12" fill="${card}" stroke="${a1}" stroke-opacity="0.6"/>
+            <text x="95" y="88" text-anchor="middle" fill="${txt}" font-size="11" font-weight="700" font-family="Inter, sans-serif">DATOS</text>
+            <rect x="245" y="62" width="80" height="44" rx="12" fill="${card}" stroke="${a2}" stroke-opacity="0.6"/>
+            <text x="285" y="88" text-anchor="middle" fill="${txt}" font-size="11" font-weight="700" font-family="Inter, sans-serif">MODELO</text>
+            <rect x="135" y="196" width="110" height="40" rx="12" fill="${card}" stroke="${a1}" stroke-opacity="0.6"/>
+            <text x="190" y="220" text-anchor="middle" fill="${a1}" font-size="11" font-weight="800" font-family="Inter, sans-serif">SALIDA ÁGIL</text>
+          </svg>
+        `;
+      }
+
+      if (domain === 'education') {
+        return `
+          <svg viewBox="0 0 380 280" class="w-full h-full anim-visual" style="--delay:160ms;">
+            <rect x="24" y="24" width="332" height="232" rx="20" fill="${card}" opacity="0.72"/>
+            <!-- Libro abierto estilizado -->
+            <path d="M190 88 C155 68, 95 72, 65 86 L65 196 C95 182, 155 178, 190 198 C225 178, 285 182, 315 196 L315 86 C285 72, 225 68, 190 88 Z"
+              fill="${theme.bg}" stroke="${a1}" stroke-width="2.5"/>
+            <line x1="190" y1="88" x2="190" y2="198" stroke="${a1}" stroke-width="2.5"/>
+            <line x1="92" y1="112" x2="162" y2="106" stroke="${mut}" stroke-width="3" stroke-linecap="round"/>
+            <line x1="92" y1="134" x2="154" y2="128" stroke="${mut}" stroke-width="3" stroke-linecap="round" opacity="0.7"/>
+            <line x1="218" y1="112" x2="288" y2="106" stroke="${a2}" stroke-width="3" stroke-linecap="round"/>
+            <line x1="218" y1="134" x2="276" y2="128" stroke="${a2}" stroke-width="3" stroke-linecap="round" opacity="0.7"/>
+            <!-- Insignia superior -->
+            <circle cx="190" cy="56" r="16" fill="${a1}" opacity="0.22" class="anim-float"/>
+            <circle cx="190" cy="56" r="7" fill="${a1}"/>
+            <text x="190" y="232" text-anchor="middle" fill="${txt}" font-size="12" font-weight="700" font-family="Inter, sans-serif">APRENDIZAJE Y ACOMPAÑAMIENTO</text>
+          </svg>
+        `;
+      }
+
+      if (domain === 'marketing') {
+        return `
+          <svg viewBox="0 0 380 280" class="w-full h-full anim-visual" style="--delay:160ms;">
+            <rect x="24" y="24" width="332" height="232" rx="20" fill="${card}" opacity="0.72"/>
+            <!-- Cohete / crecimiento ascendente -->
+            <path d="M80 205 Q175 185 265 82" fill="none" stroke="${a1}" stroke-width="3.5" stroke-dasharray="8 5" class="anim-svg-stroke" style="--dash-len:320;--dash-target:0;--delay:200ms;"/>
+            <polygon points="255,72 286,66 276,97" fill="${a1}" class="anim-float"/>
+            <rect x="76" y="156" width="32" height="48" rx="6" fill="${a2}" opacity="0.75" class="anim-svg-bar" style="--delay:180ms;"/>
+            <rect x="124" y="132" width="32" height="72" rx="6" fill="${a1}" opacity="0.85" class="anim-svg-bar" style="--delay:260ms;"/>
+            <rect x="172" y="104" width="32" height="100" rx="6" fill="${a2}" class="anim-svg-bar" style="--delay:340ms;"/>
+            <rect x="220" y="78" width="32" height="126" rx="6" fill="${a1}" class="anim-svg-bar" style="--delay:420ms;"/>
+            <text x="190" y="234" text-anchor="middle" fill="${txt}" font-size="12" font-weight="700" font-family="Inter, sans-serif">TRACCIÓN Y CONVERSIÓN</text>
+          </svg>
+        `;
+      }
+
+      if (domain === 'editorial') {
+        return `
+          <svg viewBox="0 0 380 280" class="w-full h-full anim-visual" style="--delay:160ms;">
+            <rect x="24" y="24" width="332" height="232" rx="20" fill="${card}" opacity="0.72"/>
+            <!-- Brújula / horizonte -->
+            <circle cx="190" cy="132" r="62" fill="${theme.bg}" stroke="${a1}" stroke-width="2.5"/>
+            <circle cx="190" cy="132" r="46" fill="none" stroke="${a2}" stroke-width="1.2" stroke-dasharray="4 4"/>
+            <polygon points="190,82 201,132 190,144 179,132" fill="${a1}" class="anim-float"/>
+            <polygon points="190,182 201,132 190,120 179,132" fill="${a2}" opacity="0.8"/>
+            <circle cx="190" cy="132" r="6" fill="${txt}"/>
+            <text x="190" y="226" text-anchor="middle" fill="${txt}" font-size="12" font-weight="700" font-family="Playfair Display, serif">RUMBO, CRITERIO Y PROPÓSITO</text>
+          </svg>
+        `;
+      }
+
+      // Negocios / Estrategia
+      return `
+        <svg viewBox="0 0 380 280" class="w-full h-full anim-visual" style="--delay:160ms;">
+          <rect x="24" y="24" width="332" height="232" rx="20" fill="${card}" opacity="0.72"/>
+          <!-- Diana estratégica / objetivos -->
+          <circle cx="135" cy="138" r="64" fill="none" stroke="${a1}" stroke-width="2.5" opacity="0.35"/>
+          <circle cx="135" cy="138" r="42" fill="none" stroke="${a2}" stroke-width="2.5" opacity="0.65"/>
+          <circle cx="135" cy="138" r="20" fill="${a1}" opacity="0.25"/>
+          <circle cx="135" cy="138" r="8" fill="${a1}"/>
+          <line x1="215" y1="88" x2="322" y2="88" stroke="${a1}" stroke-width="4" stroke-linecap="round"/>
+          <line x1="215" y1="118" x2="302" y2="118" stroke="${mut}" stroke-width="3" stroke-linecap="round"/>
+          <rect x="215" y="148" width="108" height="54" rx="12" fill="${theme.bg}" stroke="${a2}" stroke-opacity="0.5"/>
+          <text x="269" y="172" text-anchor="middle" fill="${a1}" font-size="15" font-weight="800" font-family="Inter, sans-serif">ENFOQUE</text>
+          <text x="269" y="190" text-anchor="middle" fill="${mut}" font-size="10.5" font-weight="600" font-family="Inter, sans-serif">Alta Precisión</text>
+          <text x="190" y="234" text-anchor="middle" fill="${txt}" font-size="12" font-weight="700" font-family="Inter, sans-serif">ESTRATEGIA Y EJECUCIÓN</text>
+        </svg>
+      `;
     }
 
     // Gráficos SVG Variados con Animación
@@ -1239,7 +1408,6 @@ Usa variedad de layouts ("cover", "funnel", "gauges", "trend_area", "stats_bar",
       return String(str || '').replace(/[&<>"']/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m]));
     }
 
-    // Renderizador de Diapositiva con Animaciones Escalonadas en Letras y Bloques
     function renderSlideHTML(slide, index, total, theme, editable = true) {
       const ed = editable ? 'contenteditable="true"' : '';
       const prof = DOMAIN_PROFILES[currentDomain] || DOMAIN_PROFILES.business;
@@ -1268,11 +1436,16 @@ Usa variedad de layouts ("cover", "funnel", "gauges", "trend_area", "stats_bar",
                 <i data-lucide="${escapeHtml(prof.icons[0] || 'sparkles')}" class="w-5 h-5"></i>
               </div>
             </div>
-            <div class="my-auto space-y-4 max-w-4xl">
-              <h1 class="text-4xl font-extrabold leading-tight clamp-3 anim-text" style="color:${theme.text}; ${titleFont} --delay:120ms;" ${ed} oninput="updateSlideField(${index}, 'title', this.innerText)">${escapeHtml(slide.title)}</h1>
-              <p class="text-lg leading-relaxed clamp-3 anim-text" style="color:${theme.muted}; --delay:220ms;" ${ed} oninput="updateSlideField(${index}, 'subtitle', this.innerText)">${escapeHtml(slide.subtitle)}</p>
+            <div class="grid grid-cols-12 gap-5 my-auto items-center">
+              <div class="col-span-7 space-y-3.5">
+                <h1 class="text-4xl font-extrabold leading-tight clamp-3 anim-text" style="color:${theme.text}; ${titleFont} --delay:120ms;" ${ed} oninput="updateSlideField(${index}, 'title', this.innerText)">${escapeHtml(slide.title)}</h1>
+                <p class="text-base leading-relaxed clamp-3 anim-text" style="color:${theme.muted}; --delay:220ms;" ${ed} oninput="updateSlideField(${index}, 'subtitle', this.innerText)">${escapeHtml(slide.subtitle)}</p>
+              </div>
+              <div class="col-span-5 h-60 flex items-center justify-center">
+                ${buildTopicIllustrationSVG(currentDomain, 'cover', theme)}
+              </div>
             </div>
-            <div class="grid grid-cols-3 gap-4 pt-4 border-t" style="border-color:${theme.muted}33;">
+            <div class="grid grid-cols-3 gap-4 pt-3 border-t" style="border-color:${theme.muted}33;">
               ${(slide.items || []).slice(0, 3).map((it, idx) => `
                 <div class="p-3 rounded-xl flex items-center gap-3 anim-card" style="background:${theme.card}; --delay:${280 + idx * 90}ms;">
                   <div class="w-9 h-9 rounded-lg flex items-center justify-center shrink-0" style="background:${theme.accent}22; color:${theme.accent};">
@@ -1285,6 +1458,37 @@ Usa variedad de layouts ("cover", "funnel", "gauges", "trend_area", "stats_bar",
                 </div>
               `).join('')}
             </div>
+          </div>
+        `;
+      }
+
+      if (slide.layout === 'visual_story') {
+        return `
+          <div class="w-full h-full flex flex-col justify-between" style="color:${theme.text};">
+            ${headerHTML}
+            <div class="grid grid-cols-12 gap-5 my-auto items-center">
+              <div class="col-span-5 h-72 flex items-center justify-center">
+                ${buildTopicIllustrationSVG(currentDomain, 'visual_story', theme)}
+              </div>
+              <div class="col-span-7 space-y-3">
+                <h2 class="text-2xl font-extrabold leading-snug clamp-2 anim-text" style="${titleFont} --delay:90ms;" ${ed} oninput="updateSlideField(${index}, 'title', this.innerText)">${escapeHtml(slide.title)}</h2>
+                <p class="text-xs leading-relaxed clamp-2 anim-text" style="color:${theme.muted}; --delay:150ms;" ${ed} oninput="updateSlideField(${index}, 'subtitle', this.innerText)">${escapeHtml(slide.subtitle)}</p>
+                <div class="space-y-2.5 pt-1">
+                  ${(slide.items || []).slice(0, 3).map((it, idx) => `
+                    <div class="p-3 rounded-xl flex items-start gap-3 anim-card" style="background:${theme.card}; --delay:${200 + idx * 90}ms;">
+                      <div class="w-8 h-8 rounded-lg flex items-center justify-center shrink-0 mt-0.5" style="background:${theme.accent}22; color:${theme.accent};">
+                        <i data-lucide="${escapeHtml(it.icon || prof.icons[idx % prof.icons.length])}" class="w-4 h-4"></i>
+                      </div>
+                      <div class="min-w-0">
+                        <div class="text-xs font-bold" style="color:${theme.accent};" ${ed} oninput="updateItemField(${index}, ${idx}, 'label', this.innerText)">${escapeHtml(it.label)}</div>
+                        <div class="text-xs leading-snug clamp-2" style="color:${theme.text};" ${ed} oninput="updateItemField(${index}, ${idx}, 'value', this.innerText)">${escapeHtml(it.value)}</div>
+                      </div>
+                    </div>
+                  `).join('')}
+                </div>
+              </div>
+            </div>
+            ${footerHTML}
           </div>
         `;
       }
@@ -1576,6 +1780,34 @@ Usa variedad de layouts ("cover", "funnel", "gauges", "trend_area", "stats_bar",
       if (Math.abs(diff) > 45) diff < 0 ? nextSlide() : prevSlide();
     }, { passive: true });
 
+    // Convierte un string SVG en data URL PNG para insertarlo fielmente en .pptx
+    function svgStringToPngDataUrl(svgString, width = 760, height = 560) {
+      return new Promise((resolve) => {
+        try {
+          const cleanSvg = svgString.replace(/class="[^"]*"/g, '').replace(/style="[^"]*"/g, '');
+          const blob = new Blob([cleanSvg], { type: 'image/svg+xml;charset=utf-8' });
+          const url = URL.createObjectURL(blob);
+          const img = new Image();
+          img.onload = () => {
+            const canvas = document.createElement('canvas');
+            canvas.width = width;
+            canvas.height = height;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0, width, height);
+            URL.revokeObjectURL(url);
+            resolve(canvas.toDataURL('image/png'));
+          };
+          img.onerror = () => {
+            URL.revokeObjectURL(url);
+            resolve(null);
+          };
+          img.src = url;
+        } catch {
+          resolve(null);
+        }
+      });
+    }
+
     async function saveFileWithLocation(blob, suggestedName, mimeType, description, extension) {
       if ('showSaveFilePicker' in window) {
         try {
@@ -1609,9 +1841,10 @@ Usa variedad de layouts ("cover", "funnel", "gauges", "trend_area", "stats_bar",
       showToast(`Descargando ${suggestedName}...`);
     }
 
+    // Exportar a PowerPoint (.pptx) manteniendo gráficos, ilustraciones y textos fieles
     async function exportToPPTX() {
       closeExportModal();
-      showToast('Generando archivo PowerPoint (.pptx)...');
+      showToast('Generando PowerPoint idéntico al diseño (.pptx)...');
 
       const pptx = new PptxGenJS();
       pptx.layout = 'LAYOUT_16x9';
@@ -1619,79 +1852,106 @@ Usa variedad de layouts ("cover", "funnel", "gauges", "trend_area", "stats_bar",
 
       const t = currentTheme;
 
-      deck.slides.forEach((s, idx) => {
+      for (let idx = 0; idx < deck.slides.length; idx++) {
+        const s = deck.slides[idx];
         const slide = pptx.addSlide();
         slide.background = { color: t.pptBg };
 
         slide.addText((s.tag || '').toUpperCase(), {
-          x: 0.6, y: 0.38, w: 5.5, h: 0.35,
+          x: 0.6, y: 0.36, w: 5.5, h: 0.35,
           fontSize: 10, bold: true, color: t.pptAccent, fontFace: 'Arial'
         });
 
         slide.addText(`${idx + 1} / ${deck.slides.length}`, {
-          x: 8.4, y: 0.38, w: 1.0, h: 0.35, align: 'right',
+          x: 8.4, y: 0.36, w: 1.0, h: 0.35, align: 'right',
           fontSize: 10, color: '94A3B8', fontFace: 'Arial'
         });
 
         if (s.layout === 'cover') {
           slide.addText(s.title, {
-            x: 0.6, y: 1.45, w: 8.8, h: 1.5,
-            fontSize: 32, bold: true, color: t.pptText, fontFace: 'Arial', valign: 'middle'
+            x: 0.6, y: 1.1, w: 5.3, h: 1.4,
+            fontSize: 28, bold: true, color: t.pptText, fontFace: 'Arial', valign: 'middle'
           });
           slide.addText(s.subtitle || '', {
-            x: 0.6, y: 3.0, w: 8.5, h: 0.9,
-            fontSize: 15, color: 'CBD5E1', fontFace: 'Arial'
+            x: 0.6, y: 2.55, w: 5.2, h: 1.1,
+            fontSize: 13.5, color: 'CBD5E1', fontFace: 'Arial'
           });
+
+          const illPng = await svgStringToPngDataUrl(buildTopicIllustrationSVG(currentDomain, 'cover', t), 760, 560);
+          if (illPng) {
+            slide.addImage({ data: illPng, x: 6.0, y: 0.95, w: 3.4, h: 2.5 });
+          }
+
           (s.items || []).slice(0, 3).forEach((it, i) => {
             const xPos = 0.6 + i * 3.0;
-            slide.addShape(pptx.ShapeType.roundRect, { x: xPos, y: 4.2, w: 2.8, h: 0.9, fill: { color: t.pptCard }, rectRadius: 0.08 });
-            slide.addText((it.label || '').toUpperCase(), { x: xPos + 0.15, y: 4.28, w: 2.5, h: 0.3, fontSize: 9, bold: true, color: t.pptAccent });
-            slide.addText(it.value || '', { x: xPos + 0.15, y: 4.58, w: 2.5, h: 0.4, fontSize: 11, bold: true, color: t.pptText });
+            slide.addShape(pptx.ShapeType.roundRect, { x: xPos, y: 4.15, w: 2.8, h: 0.9, fill: { color: t.pptCard }, rectRadius: 0.08 });
+            slide.addText((it.label || '').toUpperCase(), { x: xPos + 0.15, y: 4.22, w: 2.5, h: 0.28, fontSize: 9, bold: true, color: t.pptAccent });
+            slide.addText(it.value || '', { x: xPos + 0.15, y: 4.52, w: 2.5, h: 0.42, fontSize: 10.5, bold: true, color: t.pptText });
           });
-          return;
+          continue;
         }
 
         slide.addText(s.title || '', {
-          x: 0.6, y: 0.82, w: 8.8, h: 0.58,
-          fontSize: 22, bold: true, color: t.pptText, fontFace: 'Arial'
+          x: 0.6, y: 0.78, w: 8.8, h: 0.55,
+          fontSize: 21, bold: true, color: t.pptText, fontFace: 'Arial'
         });
         slide.addText(s.subtitle || '', {
-          x: 0.6, y: 1.4, w: 8.8, h: 0.45,
-          fontSize: 12, color: '94A3B8', fontFace: 'Arial'
+          x: 0.6, y: 1.32, w: 8.8, h: 0.42,
+          fontSize: 11.5, color: '94A3B8', fontFace: 'Arial'
         });
 
-        if (s.layout === 'stats_bar' || s.layout === 'donut' || s.layout === 'trend_area' || s.layout === 'funnel') {
-          const chartData = [{
-            name: s.title || 'Datos',
-            labels: (s.items || []).map(it => (it.label || '').slice(0, 22)),
-            values: (s.items || []).map(it => Number(it.num) || 50)
-          }];
-          const chartType = s.layout === 'donut' ? pptx.ChartType.doughnut : pptx.ChartType.bar;
-          slide.addChart(chartType, chartData, {
-            x: 0.6, y: 2.02, w: 4.5, h: 3.0,
-            chartColors: [t.pptAccent, '818CF8', '34D399', 'FBBF24'],
-            showLegend: s.layout === 'donut',
-            legendPos: 'b',
-            dataLabelColor: t.pptText
+        if (s.layout === 'visual_story') {
+          const illPng = await svgStringToPngDataUrl(buildTopicIllustrationSVG(currentDomain, 'visual_story', t), 760, 560);
+          if (illPng) {
+            slide.addImage({ data: illPng, x: 0.6, y: 1.92, w: 3.7, h: 2.85 });
+          }
+          (s.items || []).slice(0, 3).forEach((it, i) => {
+            const yPos = 1.92 + i * 1.02;
+            slide.addShape(pptx.ShapeType.roundRect, { x: 4.5, y: yPos, w: 4.9, h: 0.9, fill: { color: t.pptCard }, rectRadius: 0.08 });
+            slide.addText(it.label || '', { x: 4.68, y: yPos + 0.08, w: 4.55, h: 0.28, fontSize: 11.5, bold: true, color: t.pptAccent });
+            slide.addText(it.value || '', { x: 4.68, y: yPos + 0.38, w: 4.55, h: 0.44, fontSize: 10, color: t.pptText });
           });
+          continue;
+        }
+
+        if (s.layout === 'stats_bar' || s.layout === 'donut' || s.layout === 'trend_area' || s.layout === 'funnel') {
+          let chartSvg = '';
+          if (s.layout === 'donut') chartSvg = buildDonutChartSVG(s.items || [], t);
+          else if (s.layout === 'funnel') chartSvg = buildFunnelChartSVG(s.items || [], t);
+          else if (s.layout === 'trend_area') chartSvg = buildTrendAreaSVG(s.items || [], t);
+          else chartSvg = buildBarChartSVG(s.items || [], t);
+
+          const chartPng = await svgStringToPngDataUrl(chartSvg, 720, 540);
+          if (chartPng) {
+            slide.addShape(pptx.ShapeType.roundRect, { x: 0.6, y: 1.95, w: 4.55, h: 3.1, fill: { color: t.pptCard }, rectRadius: 0.08 });
+            slide.addImage({ data: chartPng, x: 0.72, y: 2.05, w: 4.3, h: 2.9 });
+          }
 
           (s.items || []).slice(0, 4).forEach((it, i) => {
-            const yPos = 2.02 + i * 0.75;
-            slide.addShape(pptx.ShapeType.roundRect, { x: 5.35, y: yPos, w: 4.05, h: 0.65, fill: { color: t.pptCard }, rectRadius: 0.06 });
+            const yPos = 1.95 + i * 0.78;
+            slide.addShape(pptx.ShapeType.roundRect, { x: 5.35, y: yPos, w: 4.05, h: 0.68, fill: { color: t.pptCard }, rectRadius: 0.06 });
             slide.addText(`${it.label || ''} (${it.num || 50}%)`, { x: 5.5, y: yPos + 0.06, w: 3.75, h: 0.25, fontSize: 11, bold: true, color: t.pptAccent });
-            slide.addText(it.value || '', { x: 5.5, y: yPos + 0.31, w: 3.75, h: 0.28, fontSize: 9.5, color: t.pptText });
+            slide.addText(it.value || '', { x: 5.5, y: yPos + 0.32, w: 3.75, h: 0.3, fontSize: 9.5, color: t.pptText });
           });
         } else {
           const items = (s.items || []).slice(0, 3);
           const colW = 2.8;
-          items.forEach((it, i) => {
+          for (let i = 0; i < items.length; i++) {
+            const it = items[i];
             const xPos = 0.6 + i * 3.0;
-            slide.addShape(pptx.ShapeType.roundRect, { x: xPos, y: 2.12, w: colW, h: 2.88, fill: { color: t.pptCard }, rectRadius: 0.08 });
-            slide.addText(it.label || '', { x: xPos + 0.18, y: 2.32, w: colW - 0.36, h: 0.5, fontSize: 14, bold: true, color: t.pptAccent });
-            slide.addText(it.value || '', { x: xPos + 0.18, y: 2.92, w: colW - 0.36, h: 1.85, fontSize: 11.5, color: t.pptText, valign: 'top' });
-          });
+            slide.addShape(pptx.ShapeType.roundRect, { x: xPos, y: 2.05, w: colW, h: 2.98, fill: { color: t.pptCard }, rectRadius: 0.08 });
+            if (s.layout === 'gauges') {
+              const gPng = await svgStringToPngDataUrl(buildGaugeSVG(it.num, it.label, t, i), 240, 240);
+              if (gPng) slide.addImage({ data: gPng, x: xPos + 0.92, y: 2.15, w: 0.95, h: 0.95 });
+              slide.addText(it.label || '', { x: xPos + 0.15, y: 3.15, w: colW - 0.3, h: 0.35, align: 'center', fontSize: 12.5, bold: true, color: t.pptAccent });
+              slide.addText(it.value || '', { x: xPos + 0.15, y: 3.52, w: colW - 0.3, h: 1.35, align: 'center', fontSize: 10.5, color: t.pptText, valign: 'top' });
+            } else {
+              slide.addText(it.label || '', { x: xPos + 0.18, y: 2.25, w: colW - 0.36, h: 0.45, fontSize: 13.5, bold: true, color: t.pptAccent });
+              slide.addText(it.value || '', { x: xPos + 0.18, y: 2.8, w: colW - 0.36, h: 2.0, fontSize: 11, color: t.pptText, valign: 'top' });
+            }
+          }
         }
-      });
+      }
 
       const blob = await pptx.write({ outputType: 'blob' });
       const safeName = (deck.title || 'Presentacion').replace(/[^a-zA-Z0-9áéíóúÁÉÍÓÚñÑ_-]/g, '_').slice(0, 40);
@@ -1756,7 +2016,7 @@ ${slidesMarkup}
 
       const blob = new Blob([htmlDoc], { type: 'text/html;charset=utf-8' });
       const safeName = (deck.title || 'Presentacion').replace(/[^a-zA-Z0-9áéíóúÁÉÍÓÚñÑ_-]/g, '_').slice(0, 40);
-      await saveFileWithLocation(blob, `${safeName}_Animada.html`, 'text/html', 'Presentación Web HTML', '.html');
+      await saveFileWithLocation(blob, `${safeName}_Identica.html`, 'text/html', 'Presentación Web HTML', '.html');
     }
 
     function exportToPDF() {
