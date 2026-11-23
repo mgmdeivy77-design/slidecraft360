@@ -1,0 +1,19 @@
+{
+  "name": "SlideCraft AI — Generador de Presentaciones",
+  "short_name": "SlideCraft AI",
+  "description": "Generador móvil PWA de presentaciones profesionales estilo PowerPoint con gráficos SVG y exportación .pptx.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#0b1120",
+  "theme_color": "#0f172a",
+  "icons": [
+    {
+      "src": "./icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

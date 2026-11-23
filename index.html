@@ -1,0 +1,1099 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="theme-color" content="#0f172a" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="SlideCraft AI" />
+  <title>SlideCraft AI — Generador de Presentaciones Pro</title>
+  <link rel="manifest" href="./manifest.json" />
+  <link rel="icon" type="image/svg+xml" href="./icon.svg" />
+  <link rel="apple-touch-icon" href="./icon.svg" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="https://cdn.jsdelivr.net/npm/pptxgenjs@3.12.0/dist/pptxgen.bundle.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background-color: #0b1120;
+      color: #f8fafc;
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+    }
+    .slide-stage-wrapper {
+      width: 100%;
+      position: relative;
+      overflow: hidden;
+      border-radius: 14px;
+      box-shadow: 0 20px 45px rgba(0, 0, 0, 0.55);
+      background: #1e293b;
+      aspect-ratio: 16 / 9;
+    }
+    .slide-canvas {
+      width: 960px;
+      height: 540px;
+      transform-origin: top left;
+      position: absolute;
+      top: 0;
+      left: 0;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 40px 48px;
+      user-select: none;
+    }
+    [contenteditable="true"]:focus {
+      outline: 2px dashed rgba(56, 189, 248, 0.85);
+      outline-offset: 4px;
+      border-radius: 6px;
+      background: rgba(56, 189, 248, 0.08);
+    }
+    .clamp-2 {
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .clamp-3 {
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .clamp-4 {
+      display: -webkit-box;
+      -webkit-line-clamp: 4;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    @keyframes animFade { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes animSlide { from { opacity: 0; transform: translateX(32px); } to { opacity: 1; transform: translateX(0); } }
+    @keyframes animZoom { from { opacity: 0; transform: scale(0.94); } to { opacity: 1; transform: scale(1); } }
+    @keyframes animRise { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+    .trans-fade { animation: animFade 0.45s ease-out; }
+    .trans-slide { animation: animSlide 0.42s cubic-bezier(0.22, 1, 0.36, 1); }
+    .trans-zoom { animation: animZoom 0.4s cubic-bezier(0.22, 1, 0.36, 1); }
+    .trans-rise { animation: animRise 0.42s ease-out; }
+
+    @media print {
+      body * { visibility: hidden; }
+      #printContainer, #printContainer * { visibility: visible; }
+      #printContainer {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+      }
+      .print-page {
+        width: 960px;
+        height: 540px;
+        page-break-after: always;
+        overflow: hidden;
+        position: relative;
+      }
+      @page { size: landscape; margin: 0; }
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+  <!-- Top Bar -->
+  <header class="sticky top-0 z-30 bg-slate-900/90 backdrop-blur-md border-b border-slate-800 px-4 py-3 flex items-center justify-between">
+    <div class="flex items-center gap-2.5">
+      <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-sky-500 to-indigo-600 flex items-center justify-center shadow-lg shadow-sky-500/20">
+        <i data-lucide="presentation" class="w-5 h-5 text-white"></i>
+      </div>
+      <div>
+        <h1 class="text-base font-bold tracking-tight text-white leading-none">SlideCraft AI</h1>
+        <p class="text-[11px] text-slate-400 mt-0.5">Presentaciones Ejecutivas PWA</p>
+      </div>
+    </div>
+    <div class="flex items-center gap-2">
+      <button id="installBtn" class="hidden text-xs font-semibold bg-emerald-600 hover:bg-emerald-500 text-white px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition">
+        <i data-lucide="download" class="w-3.5 h-3.5"></i> Instalar App
+      </button>
+      <button onclick="openSettingsModal()" class="p-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 transition" title="Configurar API Key">
+        <i data-lucide="key-round" class="w-4 h-4"></i>
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="flex-1 max-w-4xl w-full mx-auto px-4 py-5 space-y-6 pb-24">
+
+    <!-- Generator Card -->
+    <section class="bg-slate-900/80 border border-slate-800 rounded-2xl p-4 sm:p-6 shadow-xl space-y-4">
+      <div class="flex items-center justify-between">
+        <h2 class="text-sm font-bold uppercase tracking-wider text-sky-400 flex items-center gap-2">
+          <i data-lucide="sparkles" class="w-4 h-4"></i> Configurar Presentación
+        </h2>
+        <span id="apiStatusBadge" class="text-[11px] px-2.5 py-0.5 rounded-full bg-slate-800 text-slate-400 border border-slate-700">
+          Modo Inteligente Local
+        </span>
+      </div>
+
+      <div class="space-y-3">
+        <div>
+          <label class="block text-xs font-semibold text-slate-300 mb-1">Tema Central *</label>
+          <input id="topicInput" type="text" placeholder="Ej. Transformación Digital en la Educación Superior"
+            class="w-full bg-slate-950 border border-slate-700 focus:border-sky-500 rounded-xl px-3.5 py-2.5 text-sm text-white placeholder-slate-500 outline-none transition" />
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1">Contexto y Audiencia</label>
+            <textarea id="contextInput" rows="2" placeholder="Ej. Dirigido a directivos académicos, enfocándose en ahorro de costos y retención..."
+              class="w-full bg-slate-950 border border-slate-700 focus:border-sky-500 rounded-xl px-3.5 py-2 text-sm text-white placeholder-slate-500 outline-none transition resize-none"></textarea>
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1">Propósito / Objetivo</label>
+            <textarea id="purposeInput" rows="2" placeholder="Ej. Aprobar el presupuesto piloto para el próximo semestre..."
+              class="w-full bg-slate-950 border border-slate-700 focus:border-sky-500 rounded-xl px-3.5 py-2 text-sm text-white placeholder-slate-500 outline-none transition resize-none"></textarea>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-3 gap-2.5">
+          <div>
+            <label class="block text-[11px] font-semibold text-slate-400 mb-1">Diapositivas</label>
+            <select id="slideCountSelect" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-2.5 py-2 text-xs text-white outline-none">
+              <option value="5">5 slides</option>
+              <option value="6" selected>6 slides</option>
+              <option value="8">8 slides</option>
+              <option value="10">10 slides</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-[11px] font-semibold text-slate-400 mb-1">Paleta Visual</label>
+            <select id="themeSelect" onchange="applyThemeChange()" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-2.5 py-2 text-xs text-white outline-none">
+              <option value="corporate">Azul Ejecutivo</option>
+              <option value="emerald">Verde Estrategia</option>
+              <option value="royal">Índigo Innovación</option>
+              <option value="amber">Terracota Moderno</option>
+              <option value="light">Minimalista Claro</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-[11px] font-semibold text-slate-400 mb-1">Transición</label>
+            <select id="transitionSelect" onchange="changeTransition()" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-2.5 py-2 text-xs text-white outline-none">
+              <option value="slide">Deslizar</option>
+              <option value="fade">Desvanecer</option>
+              <option value="zoom">Zoom Suave</option>
+              <option value="rise">Elevación</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <button id="generateBtn" onclick="generateDeck()"
+        class="w-full py-3 rounded-xl bg-gradient-to-r from-sky-500 to-indigo-600 hover:from-sky-400 hover:to-indigo-500 font-bold text-sm text-white shadow-lg shadow-sky-600/25 flex items-center justify-center gap-2 transition active:scale-[0.99]">
+        <i data-lucide="wand-2" class="w-4 h-4"></i>
+        <span>Generar Presentación Profesional</span>
+      </button>
+    </section>
+
+    <!-- Preview & Editor Section -->
+    <section id="workspaceSection" class="hidden space-y-4">
+      <div class="flex flex-wrap items-center justify-between gap-2">
+        <div class="flex items-center gap-2">
+          <span id="slideCounter" class="text-xs font-bold bg-slate-800 text-sky-400 px-3 py-1.5 rounded-lg border border-slate-700">
+            Diapositiva 1 / 6
+          </span>
+          <span class="text-[11px] text-slate-400 hidden sm:inline">Toca cualquier texto para editarlo</span>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <button onclick="startPresentationMode()" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs font-semibold text-white flex items-center gap-1.5 border border-slate-700 transition">
+            <i data-lucide="play" class="w-3.5 h-3.5 text-emerald-400"></i> Presentar
+          </button>
+          <button onclick="openExportModal()" class="px-3.5 py-1.5 rounded-lg bg-sky-600 hover:bg-sky-500 text-xs font-bold text-white flex items-center gap-1.5 shadow-md transition">
+            <i data-lucide="share" class="w-3.5 h-3.5"></i> Exportar
+          </button>
+        </div>
+      </div>
+
+      <!-- 16:9 Scaled Stage -->
+      <div id="stageWrapper" class="slide-stage-wrapper border border-slate-700/80">
+        <div id="slideCanvas" class="slide-canvas"></div>
+      </div>
+
+      <!-- Navigation Controls -->
+      <div class="flex items-center justify-between gap-3">
+        <button onclick="prevSlide()" class="flex-1 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-semibold text-white flex items-center justify-center gap-1.5 border border-slate-700 transition">
+          <i data-lucide="chevron-left" class="w-4 h-4"></i> Anterior
+        </button>
+        <div id="dotsContainer" class="flex items-center gap-1.5 overflow-x-auto px-1"></div>
+        <button onclick="nextSlide()" class="flex-1 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-semibold text-white flex items-center justify-center gap-1.5 border border-slate-700 transition">
+          Siguiente <i data-lucide="chevron-right" class="w-4 h-4"></i>
+        </button>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Fullscreen Presentation Overlay -->
+  <div id="presentOverlay" class="fixed inset-0 z-50 bg-black hidden flex-col items-center justify-center">
+    <button onclick="exitPresentationMode()" class="absolute top-4 right-4 z-50 bg-slate-900/80 text-white px-3 py-1.5 rounded-lg text-xs font-semibold border border-slate-700 flex items-center gap-1.5">
+      <i data-lucide="x" class="w-4 h-4"></i> Salir
+    </button>
+    <div id="presentWrapper" class="w-full max-w-6xl aspect-video relative overflow-hidden">
+      <div id="presentCanvas" class="slide-canvas"></div>
+    </div>
+    <div class="absolute bottom-5 flex items-center gap-4 bg-slate-900/85 px-4 py-2 rounded-full border border-slate-700">
+      <button onclick="prevSlide(true)" class="text-white p-1"><i data-lucide="chevron-left" class="w-5 h-5"></i></button>
+      <span id="presentCounter" class="text-xs font-bold text-slate-200">1 / 6</span>
+      <button onclick="nextSlide(true)" class="text-white p-1"><i data-lucide="chevron-right" class="w-5 h-5"></i></button>
+    </div>
+  </div>
+
+  <!-- Export Modal -->
+  <div id="exportModal" class="fixed inset-0 z-40 bg-black/75 backdrop-blur-sm hidden items-center justify-center p-4">
+    <div class="bg-slate-900 border border-slate-700 rounded-2xl max-w-md w-full p-5 space-y-4 shadow-2xl">
+      <div class="flex items-center justify-between">
+        <h3 class="text-base font-bold text-white flex items-center gap-2">
+          <i data-lucide="folder-down" class="w-5 h-5 text-sky-400"></i> Exportar Presentación
+        </h3>
+        <button onclick="closeExportModal()" class="text-slate-400 hover:text-white"><i data-lucide="x" class="w-5 h-5"></i></button>
+      </div>
+      <p class="text-xs text-slate-400">Elige el formato y selecciona la carpeta de destino en tu dispositivo.</p>
+
+      <div class="space-y-2.5">
+        <button onclick="exportToPPTX()" class="w-full p-3.5 rounded-xl bg-slate-800 hover:bg-slate-750 border border-slate-700 hover:border-sky-500 flex items-center justify-between text-left transition">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-lg bg-orange-500/20 text-orange-400 flex items-center justify-center font-bold text-xs">PPTX</div>
+            <div>
+              <div class="text-sm font-bold text-white">PowerPoint Editable (.pptx)</div>
+              <div class="text-[11px] text-slate-400">Elegir carpeta y guardar archivo nativo</div>
+            </div>
+          </div>
+          <i data-lucide="chevron-right" class="w-4 h-4 text-slate-400"></i>
+        </button>
+
+        <button onclick="exportToHTML()" class="w-full p-3.5 rounded-xl bg-slate-800 hover:bg-slate-750 border border-slate-700 hover:border-sky-500 flex items-center justify-between text-left transition">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-lg bg-sky-500/20 text-sky-400 flex items-center justify-center font-bold text-xs">HTML</div>
+            <div>
+              <div class="text-sm font-bold text-white">Presentación Web Interactiva (.html)</div>
+              <div class="text-[11px] text-slate-400">Con transiciones y gráficos SVG incrustados</div>
+            </div>
+          </div>
+          <i data-lucide="chevron-right" class="w-4 h-4 text-slate-400"></i>
+        </button>
+
+        <button onclick="exportToPDF()" class="w-full p-3.5 rounded-xl bg-slate-800 hover:bg-slate-750 border border-slate-700 hover:border-sky-500 flex items-center justify-between text-left transition">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-lg bg-rose-500/20 text-rose-400 flex items-center justify-center font-bold text-xs">PDF</div>
+            <div>
+              <div class="text-sm font-bold text-white">Documento PDF Horizontal (16:9)</div>
+              <div class="text-[11px] text-slate-400">Listo para imprimir o compartir</div>
+            </div>
+          </div>
+          <i data-lucide="chevron-right" class="w-4 h-4 text-slate-400"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Settings Modal (Gemini API Key) -->
+  <div id="settingsModal" class="fixed inset-0 z-40 bg-black/75 backdrop-blur-sm hidden items-center justify-center p-4">
+    <div class="bg-slate-900 border border-slate-700 rounded-2xl max-w-md w-full p-5 space-y-4 shadow-2xl">
+      <div class="flex items-center justify-between">
+        <h3 class="text-base font-bold text-white flex items-center gap-2">
+          <i data-lucide="cpu" class="w-5 h-5 text-sky-400"></i> Motor de Inteligencia Artificial
+        </h3>
+        <button onclick="closeSettingsModal()" class="text-slate-400 hover:text-white"><i data-lucide="x" class="w-5 h-5"></i></button>
+      </div>
+      <p class="text-xs text-slate-300 leading-relaxed">
+        Ingresa tu <strong>API Key de Google Gemini</strong> (opcional) para generar contenido profundo y datos analíticos personalizados en tiempo real. Si la dejas vacía, la app usará su motor estructurado offline.
+      </p>
+      <input id="apiKeyInput" type="password" placeholder="AIzaSy..."
+        class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm text-white outline-none focus:border-sky-500" />
+      <div class="flex justify-end gap-2">
+        <button onclick="saveApiKey()" class="px-4 py-2 rounded-xl bg-sky-600 hover:bg-sky-500 text-xs font-bold text-white">Guardar Configuración</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="fixed bottom-5 left-1/2 -translate-x-1/2 z-50 bg-slate-800 border border-slate-600 text-white text-xs font-medium px-4 py-2.5 rounded-full shadow-xl opacity-0 pointer-events-none transition-opacity duration-300"></div>
+
+  <!-- Hidden Print Container -->
+  <div id="printContainer" class="hidden"></div>
+
+  <script>
+    // Registrar Service Worker para PWA
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js').catch(() => {});
+      });
+    }
+
+    // Prompt de instalación PWA
+    let deferredPrompt;
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      document.getElementById('installBtn').classList.remove('hidden');
+    });
+    document.getElementById('installBtn').addEventListener('click', async () => {
+      if (!deferredPrompt) return;
+      deferredPrompt.prompt();
+      await deferredPrompt.userChoice;
+      deferredPrompt = null;
+      document.getElementById('installBtn').classList.add('hidden');
+    });
+
+    // Paletas de Color
+    const THEMES = {
+      corporate: { bg: '#0f172a', card: '#1e293b', text: '#f8fafc', muted: '#94a3b8', accent: '#38bdf8', accent2: '#818cf8', pptBg: '0F172A', pptCard: '1E293B', pptText: 'F8FAFC', pptAccent: '38BDF8' },
+      emerald:   { bg: '#062c24', card: '#0d3d33', text: '#ecfdf5', muted: '#a7f3d0', accent: '#34d399', accent2: '#fbbf24', pptBg: '062C24', pptCard: '0D3D33', pptText: 'ECFDF5', pptAccent: '34D399' },
+      royal:     { bg: '#17153b', card: '#2e236c', text: '#f5f3ff', muted: '#c4b5fd', accent: '#a78bfa', accent2: '#f472b6', pptBg: '17153B', pptCard: '2E236C', pptText: 'F5F3FF', pptAccent: 'A78BFA' },
+      amber:     { bg: '#1c1917', card: '#292524', text: '#fafaf9', muted: '#d6d3d1', accent: '#fb923c', accent2: '#facc15', pptBg: '1C1917', pptCard: '292524', pptText: 'FAFAF9', pptAccent: 'FB923C' },
+      light:     { bg: '#f8fafc', card: '#ffffff', text: '#0f172a', muted: '#475569', accent: '#0284c7', accent2: '#4f46e5', pptBg: 'F8FAFC', pptCard: 'FFFFFF', pptText: '0F172A', pptAccent: '0284C7' }
+    };
+
+    let deck = null;
+    let currentIndex = 0;
+    let currentTheme = THEMES.corporate;
+    let currentTransition = 'slide';
+
+    // Cargar API Key guardada
+    window.addEventListener('DOMContentLoaded', () => {
+      lucide.createIcons();
+      const savedKey = localStorage.getItem('gemini_api_key') || '';
+      document.getElementById('apiKeyInput').value = savedKey;
+      updateApiBadge(savedKey);
+      window.addEventListener('resize', scaleAllStages);
+    });
+
+    function updateApiBadge(key) {
+      const badge = document.getElementById('apiStatusBadge');
+      if (key && key.trim().length > 10) {
+        badge.textContent = 'Gemini AI Conectado';
+        badge.className = 'text-[11px] px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40';
+      } else {
+        badge.textContent = 'Modo Inteligente Local';
+        badge.className = 'text-[11px] px-2.5 py-0.5 rounded-full bg-slate-800 text-slate-400 border border-slate-700';
+      }
+    }
+
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.classList.remove('opacity-0');
+      setTimeout(() => t.classList.add('opacity-0'), 3200);
+    }
+
+    function openSettingsModal() { document.getElementById('settingsModal').classList.replace('hidden', 'flex'); }
+    function closeSettingsModal() { document.getElementById('settingsModal').classList.replace('flex', 'hidden'); }
+    function saveApiKey() {
+      const key = document.getElementById('apiKeyInput').value.trim();
+      localStorage.setItem('gemini_api_key', key);
+      updateApiBadge(key);
+      closeSettingsModal();
+      showToast('Configuración guardada correctamente');
+    }
+
+    function openExportModal() {
+      if (!deck) return showToast('Primero genera una presentación');
+      document.getElementById('exportModal').classList.replace('hidden', 'flex');
+    }
+    function closeExportModal() { document.getElementById('exportModal').classList.replace('flex', 'hidden'); }
+
+    function applyThemeChange() {
+      const val = document.getElementById('themeSelect').value;
+      currentTheme = THEMES[val] || THEMES.corporate;
+      if (deck) renderCurrentSlide();
+    }
+
+    function changeTransition() {
+      currentTransition = document.getElementById('transitionSelect').value;
+      if (deck) renderCurrentSlide();
+    }
+
+    function scaleAllStages() {
+      const wrapper = document.getElementById('stageWrapper');
+      const canvas = document.getElementById('slideCanvas');
+      if (wrapper && canvas && wrapper.offsetWidth > 0) {
+        const scale = wrapper.offsetWidth / 960;
+        canvas.style.transform = `scale(${scale})`;
+      }
+      const pWrapper = document.getElementById('presentWrapper');
+      const pCanvas = document.getElementById('presentCanvas');
+      if (pWrapper && pCanvas && pWrapper.offsetWidth > 0) {
+        const pScale = pWrapper.offsetWidth / 960;
+        pCanvas.style.transform = `scale(${pScale})`;
+      }
+    }
+
+    // Generación con Gemini API o Respaldo Local Estructurado
+    async function generateDeck() {
+      const topic = document.getElementById('topicInput').value.trim();
+      const context = document.getElementById('contextInput').value.trim();
+      const purpose = document.getElementById('purposeInput').value.trim();
+      const count = parseInt(document.getElementById('slideCountSelect').value, 10);
+
+      if (!topic) {
+        showToast('Por favor escribe el tema central de la presentación');
+        document.getElementById('topicInput').focus();
+        return;
+      }
+
+      const btn = document.getElementById('generateBtn');
+      btn.disabled = true;
+      btn.innerHTML = `<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i><span>Diseñando diapositivas...</span>`;
+      lucide.createIcons();
+
+      const apiKey = localStorage.getItem('gemini_api_key');
+
+      try {
+        if (apiKey && apiKey.length > 10) {
+          deck = await fetchFromGemini(apiKey, topic, context, purpose, count);
+        } else {
+          await new Promise(r => setTimeout(r, 600));
+          deck = buildSmartLocalDeck(topic, context, purpose, count);
+        }
+
+        currentIndex = 0;
+        document.getElementById('workspaceSection').classList.remove('hidden');
+        renderCurrentSlide();
+        setTimeout(scaleAllStages, 50);
+        showToast('Presentación generada con éxito');
+      } catch (err) {
+        console.error(err);
+        deck = buildSmartLocalDeck(topic, context, purpose, count);
+        currentIndex = 0;
+        document.getElementById('workspaceSection').classList.remove('hidden');
+        renderCurrentSlide();
+        setTimeout(scaleAllStages, 50);
+        showToast('Generada con motor local (verifica tu API Key si deseas usar nube)');
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = `<i data-lucide="wand-2" class="w-4 h-4"></i><span>Generar Presentación Profesional</span>`;
+        lucide.createIcons();
+      }
+    }
+
+    async function fetchFromGemini(apiKey, topic, context, purpose, count) {
+      const prompt = `Crea una presentación ejecutiva en español sobre el tema: "${topic}".
+Contexto: "${context || 'Audiencia profesional'}".
+Propósito: "${purpose || 'Informar y proponer acciones estratégicas'}".
+Número exacto de diapositivas: ${count}.
+
+Devuelve ÚNICAMENTE un JSON válido (sin markdown, sin bloques de código) con esta estructura exacta:
+{
+  "title": "Título general corto",
+  "slides": [
+    {
+      "layout": "cover | stats_bar | pillars | donut | timeline | closing",
+      "tag": "Etiqueta corta (máx 22 caracteres)",
+      "title": "Título de diapositiva (máx 58 caracteres)",
+      "subtitle": "Subtítulo claro (máx 115 caracteres)",
+      "items": [
+        { "label": "Título breve (máx 30 chars)", "value": "Dato o texto (máx 85 chars)", "num": 75, "icon": "trending-up" }
+      ]
+    }
+  ]
+}
+Reglas estrictas:
+- Diapositiva 1 debe ser layout "cover".
+- Incluye al menos una diapositiva "stats_bar" y una "donut" con valores numéricos ("num" entre 15 y 95) coherentes con el tema.
+- Diapositiva final debe ser layout "closing".
+- Cada slide debe tener entre 3 y 4 items. Respeta los límites de caracteres para evitar desbordamiento visual.`;
+
+      const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${encodeURIComponent(apiKey)}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          contents: [{ parts: [{ text: prompt }] }],
+          generationConfig: { responseMimeType: 'application/json', temperature: 0.4 }
+        })
+      });
+
+      if (!res.ok) throw new Error('Error en API Gemini');
+      const data = await res.json();
+      const rawText = data.candidates[0].content.parts[0].text;
+      return JSON.parse(rawText);
+    }
+
+    function buildSmartLocalDeck(topic, context, purpose, count) {
+      const ctxText = context || 'Enfoque estratégico para toma de decisiones clave';
+      const purpText = purpose || 'Establecer una hoja de ruta clara y medible';
+
+      const baseSlides = [
+        {
+          layout: 'cover',
+          tag: 'PRESENTACIÓN EJECUTIVA',
+          title: topic,
+          subtitle: `${ctxText}. ${purpText}`,
+          items: [
+            { label: 'Enfoque', value: 'Basado en Evidencia', num: 100, icon: 'target' },
+            { label: 'Alcance', value: 'Implementación Integral', num: 100, icon: 'layers' },
+            { label: 'Meta', value: 'Impacto Sostenible', num: 100, icon: 'award' }
+          ]
+        },
+        {
+          layout: 'pillars',
+          tag: 'DIAGNÓSTICO Y CONTEXTO',
+          title: `Situación Actual: ${topic.slice(0, 34)}`,
+          subtitle: ctxText.slice(0, 110),
+          items: [
+            { label: 'Necesidad Detectada', value: 'Optimizar procesos críticos y alinear recursos hacia resultados verificables.', num: 80, icon: 'search' },
+            { label: 'Oportunidad Clave', value: 'Capitalizar mejoras metodológicas para elevar la eficiencia operativa.', num: 85, icon: 'lightbulb' },
+            { label: 'Riesgo de Inacción', value: 'Brechas de competitividad y pérdida de impacto en los objetivos centrales.', num: 70, icon: 'alert-triangle' }
+          ]
+        },
+        {
+          layout: 'stats_bar',
+          tag: 'INDICADORES PROYECTADOS',
+          title: 'Impacto Cuantitativo Esperado',
+          subtitle: 'Estimación comparativa tras aplicar las mejoras propuestas en el plan.',
+          items: [
+            { label: 'Eficiencia Operativa', value: '+84% de optimización en tiempos de ejecución', num: 84, icon: 'trending-up' },
+            { label: 'Adopción y Calidad', value: '91% de cumplimiento en estándares clave', num: 91, icon: 'check-circle' },
+            { label: 'Retorno Estratégico', value: '76% de mejora en indicadores de propósito', num: 76, icon: 'bar-chart-3' },
+            { label: 'Reducción de Fricción', value: '68% menos reprocesos administrativos', num: 68, icon: 'shield-check' }
+          ]
+        },
+        {
+          layout: 'donut',
+          tag: 'DISTRIBUCIÓN DE RECURSOS',
+          title: 'Asignación Estratégica por Eje',
+          subtitle: 'Balance recomendado para garantizar sostenibilidad y ejecución efectiva.',
+          items: [
+            { label: 'Ejecución y Operaciones', value: '45% — Implementación directa y seguimiento', num: 45, icon: 'settings' },
+            { label: 'Capacitación y Talento', value: '30% — Fortalecimiento de capacidades clave', num: 30, icon: 'users' },
+            { label: 'Innovación y Control', value: '25% — Monitoreo continuo y mejora ágil', num: 25, icon: 'compass' }
+          ]
+        },
+        {
+          layout: 'timeline',
+          tag: 'HOJA DE RUTA',
+          title: 'Fases de Implementación',
+          subtitle: 'Secuencia progresiva orientada a cumplir el propósito definido.',
+          items: [
+            { label: 'Fase 1: Diagnóstico', value: 'Validación de línea base, métricas y equipo responsable.', num: 25, icon: 'flag' },
+            { label: 'Fase 2: Despliegue Piloto', value: 'Ejecución controlada con ajustes tempranos basados en datos.', num: 55, icon: 'rocket' },
+            { label: 'Fase 3: Escalamiento', value: 'Consolidación institucional y evaluación de impacto final.', num: 100, icon: 'trophy' }
+          ]
+        },
+        {
+          layout: 'closing',
+          tag: 'CONCLUSIONES Y PRÓXIMOS PASOS',
+          title: 'Compromiso de Acción Inmediata',
+          subtitle: purpText.slice(0, 115),
+          items: [
+            { label: '1. Aprobación', value: 'Validar el alcance y cronograma propuesto con los líderes clave.', num: 100, icon: 'check-square' },
+            { label: '2. Asignación', value: 'Definir responsables directos e indicadores de seguimiento semanal.', num: 100, icon: 'user-check' },
+            { label: '3. Arranque', value: 'Iniciar la primera fase operativa dentro de los próximos 7 días.', num: 100, icon: 'play-circle' }
+          ]
+        }
+      ];
+
+      while (baseSlides.length < count) {
+        const idx = baseSlides.length;
+        baseSlides.splice(baseSlides.length - 1, 0, {
+          layout: 'pillars',
+          tag: `ANÁLISIS COMPLEMENTARIO ${idx}`,
+          title: `Dimensiones Clave de ${topic.slice(0, 30)}`,
+          subtitle: 'Factores críticos de éxito para asegurar la calidad de la ejecución.',
+          items: [
+            { label: 'Gobernanza Clara', value: 'Roles definidos y comunicación transparente entre actores.', num: 80, icon: 'shield' },
+            { label: 'Medición Continua', value: 'Tableros de control periódicos para corregir desviaciones.', num: 85, icon: 'activity' },
+            { label: 'Sostenibilidad', value: 'Documentación de buenas prácticas para continuidad a largo plazo.', num: 90, icon: 'refresh-cw' }
+          ]
+        });
+      }
+
+      return { title: topic, slides: baseSlides.slice(0, count) };
+    }
+
+    // Generadores SVG Dinámicos
+    function buildBarChartSVG(items, theme) {
+      const bars = items.slice(0, 4).map((it, i) => {
+        const val = Math.min(100, Math.max(10, Number(it.num) || 60));
+        const y = 20 + i * 62;
+        const barW = Math.round((val / 100) * 280);
+        return `
+          <g>
+            <text x="0" y="${y + 14}" fill="${theme.text}" font-size="13" font-weight="600" font-family="Inter, sans-serif">${escapeHtml(it.label.slice(0, 26))}</text>
+            <rect x="0" y="${y + 22}" width="280" height="16" rx="8" fill="${theme.bg}" opacity="0.6"/>
+            <rect x="0" y="${y + 22}" width="${barW}" height="16" rx="8" fill="${i % 2 === 0 ? theme.accent : theme.accent2}"/>
+            <text x="292" y="${y + 35}" fill="${theme.accent}" font-size="14" font-weight="800" font-family="Inter, sans-serif">${val}%</text>
+          </g>
+        `;
+      }).join('');
+      return `<svg viewBox="0 0 345 270" class="w-full h-full">${bars}</svg>`;
+    }
+
+    function buildDonutChartSVG(items, theme) {
+      const colors = [theme.accent, theme.accent2, '#34d399', '#fbbf24'];
+      const total = items.reduce((acc, it) => acc + (Number(it.num) || 30), 0) || 100;
+      let cumulative = 0;
+      const radius = 78;
+      const circumference = 2 * Math.PI * radius;
+
+      const segments = items.slice(0, 4).map((it, i) => {
+        const val = Number(it.num) || 30;
+        const pct = val / total;
+        const dash = pct * circumference;
+        const offset = -cumulative * circumference;
+        cumulative += pct;
+        return `<circle r="${radius}" cx="115" cy="115" fill="transparent" stroke="${colors[i % colors.length]}" stroke-width="28"
+          stroke-dasharray="${dash} ${circumference}" stroke-dashoffset="${offset}" transform="rotate(-90 115 115)" />`;
+      }).join('');
+
+      return `
+        <svg viewBox="0 0 230 230" class="w-56 h-56 mx-auto">
+          <circle r="${radius}" cx="115" cy="115" fill="transparent" stroke="${theme.bg}" stroke-width="28" opacity="0.5"/>
+          ${segments}
+          <text x="115" y="112" text-anchor="middle" fill="${theme.text}" font-size="22" font-weight="800" font-family="Inter, sans-serif">100%</text>
+          <text x="115" y="132" text-anchor="middle" fill="${theme.muted}" font-size="11" font-weight="600" font-family="Inter, sans-serif">DISTRIBUCIÓN</text>
+        </svg>
+      `;
+    }
+
+    function escapeHtml(str) {
+      return String(str || '').replace(/[&<>"']/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m]));
+    }
+
+    function renderSlideHTML(slide, index, total, theme, editable = true) {
+      const ed = editable ? 'contenteditable="true"' : '';
+      const headerHTML = `
+        <div class="flex items-center justify-between border-b pb-3" style="border-color: ${theme.muted}33;">
+          <span class="text-xs font-extrabold tracking-widest uppercase px-3 py-1 rounded-full" style="background:${theme.accent}22; color:${theme.accent};" ${ed} oninput="updateSlideField(${index}, 'tag', this.innerText)">${escapeHtml(slide.tag)}</span>
+          <span class="text-xs font-semibold" style="color:${theme.muted};">${deck.title.slice(0, 38)} &bull; ${index + 1}/${total}</span>
+        </div>
+      `;
+
+      const footerHTML = `
+        <div class="flex items-center justify-between text-[11px] pt-2 border-t" style="border-color: ${theme.muted}22; color:${theme.muted};">
+          <span>SlideCraft AI &bull; Presentación Ejecutiva</span>
+          <span>${index + 1} / ${total}</span>
+        </div>
+      `;
+
+      if (slide.layout === 'cover') {
+        return `
+          <div class="w-full h-full flex flex-col justify-between" style="color:${theme.text};">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-extrabold tracking-widest uppercase px-3.5 py-1.5 rounded-full" style="background:${theme.accent}25; color:${theme.accent};" ${ed} oninput="updateSlideField(${index}, 'tag', this.innerText)">${escapeHtml(slide.tag)}</span>
+              <div class="w-10 h-10 rounded-xl flex items-center justify-center" style="background:${theme.accent}22; color:${theme.accent};">
+                <i data-lucide="sparkles" class="w-5 h-5"></i>
+              </div>
+            </div>
+            <div class="my-auto space-y-4 max-w-3xl">
+              <h1 class="text-4xl font-extrabold leading-tight clamp-3" style="color:${theme.text};" ${ed} oninput="updateSlideField(${index}, 'title', this.innerText)">${escapeHtml(slide.title)}</h1>
+              <p class="text-lg leading-relaxed clamp-3" style="color:${theme.muted};" ${ed} oninput="updateSlideField(${index}, 'subtitle', this.innerText)">${escapeHtml(slide.subtitle)}</p>
+            </div>
+            <div class="grid grid-cols-3 gap-4 pt-4 border-t" style="border-color:${theme.muted}33;">
+              ${(slide.items || []).slice(0, 3).map((it, idx) => `
+                <div class="p-3 rounded-xl flex items-center gap-3" style="background:${theme.card};">
+                  <div class="w-9 h-9 rounded-lg flex items-center justify-center shrink-0" style="background:${theme.accent}22; color:${theme.accent};">
+                    <i data-lucide="${escapeHtml(it.icon || 'check-circle')}" class="w-4 h-4"></i>
+                  </div>
+                  <div class="min-w-0">
+                    <div class="text-[11px] uppercase font-bold truncate" style="color:${theme.muted};" ${ed} oninput="updateItemField(${index}, ${idx}, 'label', this.innerText)">${escapeHtml(it.label)}</div>
+                    <div class="text-xs font-bold truncate" style="color:${theme.text};" ${ed} oninput="updateItemField(${index}, ${idx}, 'value', this.innerText)">${escapeHtml(it.value)}</div>
+                  </div>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        `;
+      }
+
+      if (slide.layout === 'stats_bar') {
+        return `
+          <div class="w-full h-full flex flex-col justify-between" style="color:${theme.text};">
+            ${headerHTML}
+            <div class="grid grid-cols-12 gap-6 my-auto items-center">
+              <div class="col-span-5 space-y-3">
+                <h2 class="text-2xl font-extrabold leading-snug clamp-2" ${ed} oninput="updateSlideField(${index}, 'title', this.innerText)">${escapeHtml(slide.title)}</h2>
+                <p class="text-sm leading-relaxed clamp-3" style="color:${theme.muted};" ${ed} oninput="updateSlideField(${index}, 'subtitle', this.innerText)">${escapeHtml(slide.subtitle)}</p>
+                <div class="space-y-2 pt-1">
+                  ${(slide.items || []).slice(0, 3).map((it, idx) => `
+                    <div class="p-2.5 rounded-lg text-xs clamp-2" style="background:${theme.card};" ${ed} oninput="updateItemField(${index}, ${idx}, 'value', this.innerText)">
+                      <strong style="color:${theme.accent};">${escapeHtml(it.label)}:</strong> ${escapeHtml(it.value)}
+                    </div>
+                  `).join('')}
+                </div>
+              </div>
+              <div class="col-span-7 p-5 rounded-2xl h-72 flex items-center justify-center" style="background:${theme.card};">
+                ${buildBarChartSVG(slide.items || [], theme)}
+              </div>
+            </div>
+            ${footerHTML}
+          </div>
+        `;
+      }
+
+      if (slide.layout === 'donut') {
+        return `
+          <div class="w-full h-full flex flex-col justify-between" style="color:${theme.text};">
+            ${headerHTML}
+            <div class="my-auto space-y-3">
+              <div>
+                <h2 class="text-2xl font-extrabold clamp-2" ${ed} oninput="updateSlideField(${index}, 'title', this.innerText)">${escapeHtml(slide.title)}</h2>
+                <p class="text-sm clamp-2" style="color:${theme.muted};" ${ed} oninput="updateSlideField(${index}, 'subtitle', this.innerText)">${escapeHtml(slide.subtitle)}</p>
+              </div>
+              <div class="grid grid-cols-12 gap-6 items-center pt-1">
+                <div class="col-span-5 p-4 rounded-2xl flex items-center justify-center" style="background:${theme.card};">
+                  ${buildDonutChartSVG(slide.items || [], theme)}
+                </div>
+                <div class="col-span-7 space-y-3">
+                  ${(slide.items || []).slice(0, 4).map((it, idx) => `
+                    <div class="p-3.5 rounded-xl flex items-center justify-between gap-3" style="background:${theme.card};">
+                      <div class="flex items-center gap-3 min-w-0">
+                        <div class="w-9 h-9 rounded-lg flex items-center justify-center shrink-0" style="background:${theme.accent}22; color:${theme.accent};">
+                          <i data-lucide="${escapeHtml(it.icon || 'pie-chart')}" class="w-4 h-4"></i>
+                        </div>
+                        <div class="min-w-0">
+                          <div class="text-sm font-bold truncate" ${ed} oninput="updateItemField(${index}, ${idx}, 'label', this.innerText)">${escapeHtml(it.label)}</div>
+                          <div class="text-xs clamp-2" style="color:${theme.muted};" ${ed} oninput="updateItemField(${index}, ${idx}, 'value', this.innerText)">${escapeHtml(it.value)}</div>
+                        </div>
+                      </div>
+                      <span class="text-lg font-extrabold shrink-0" style="color:${theme.accent};">${it.num || 30}%</span>
+                    </div>
+                  `).join('')}
+                </div>
+              </div>
+            </div>
+            ${footerHTML}
+          </div>
+        `;
+      }
+
+      if (slide.layout === 'timeline') {
+        const cols = Math.min(4, Math.max(2, (slide.items || []).length));
+        return `
+          <div class="w-full h-full flex flex-col justify-between" style="color:${theme.text};">
+            ${headerHTML}
+            <div class="my-auto space-y-5">
+              <div>
+                <h2 class="text-2xl font-extrabold clamp-2" ${ed} oninput="updateSlideField(${index}, 'title', this.innerText)">${escapeHtml(slide.title)}</h2>
+                <p class="text-sm clamp-2" style="color:${theme.muted};" ${ed} oninput="updateSlideField(${index}, 'subtitle', this.innerText)">${escapeHtml(slide.subtitle)}</p>
+              </div>
+              <div class="grid grid-cols-${cols} gap-4">
+                ${(slide.items || []).slice(0, 4).map((it, idx) => `
+                  <div class="p-4 rounded-2xl flex flex-col justify-between space-y-3 border-t-4" style="background:${theme.card}; border-color:${idx % 2 === 0 ? theme.accent : theme.accent2};">
+                    <div class="flex items-center justify-between">
+                      <span class="text-xs font-extrabold px-2.5 py-0.5 rounded-md" style="background:${theme.accent}22; color:${theme.accent};">ETAPA ${idx + 1}</span>
+                      <i data-lucide="${escapeHtml(it.icon || 'flag')}" class="w-4 h-4" style="color:${theme.accent};"></i>
+                    </div>
+                    <div class="text-base font-bold clamp-2" ${ed} oninput="updateItemField(${index}, ${idx}, 'label', this.innerText)">${escapeHtml(it.label)}</div>
+                    <p class="text-xs leading-relaxed clamp-4" style="color:${theme.muted};" ${ed} oninput="updateItemField(${index}, ${idx}, 'value', this.innerText)">${escapeHtml(it.value)}</p>
+                  </div>
+                `).join('')}
+              </div>
+            </div>
+            ${footerHTML}
+          </div>
+        `;
+      }
+
+      // Default: pillars / closing
+      const cols = Math.min(3, Math.max(2, (slide.items || []).length));
+      return `
+        <div class="w-full h-full flex flex-col justify-between" style="color:${theme.text};">
+          ${headerHTML}
+          <div class="my-auto space-y-5">
+            <div>
+              <h2 class="text-2xl font-extrabold clamp-2" ${ed} oninput="updateSlideField(${index}, 'title', this.innerText)">${escapeHtml(slide.title)}</h2>
+              <p class="text-sm clamp-2" style="color:${theme.muted};" ${ed} oninput="updateSlideField(${index}, 'subtitle', this.innerText)">${escapeHtml(slide.subtitle)}</p>
+            </div>
+            <div class="grid grid-cols-${cols} gap-4">
+              ${(slide.items || []).slice(0, 3).map((it, idx) => `
+                <div class="p-5 rounded-2xl space-y-3" style="background:${theme.card};">
+                  <div class="w-10 h-10 rounded-xl flex items-center justify-center" style="background:${theme.accent}22; color:${theme.accent};">
+                    <i data-lucide="${escapeHtml(it.icon || 'layers')}" class="w-5 h-5"></i>
+                  </div>
+                  <div class="text-base font-bold clamp-2" ${ed} oninput="updateItemField(${index}, ${idx}, 'label', this.innerText)">${escapeHtml(it.label)}</div>
+                  <p class="text-xs leading-relaxed clamp-4" style="color:${theme.muted};" ${ed} oninput="updateItemField(${index}, ${idx}, 'value', this.innerText)">${escapeHtml(it.value)}</p>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+          ${footerHTML}
+        </div>
+      `;
+    }
+
+    function updateSlideField(sIdx, field, value) {
+      if (deck && deck.slides[sIdx]) deck.slides[sIdx][field] = value;
+    }
+
+    function updateItemField(sIdx, iIdx, field, value) {
+      if (deck && deck.slides[sIdx] && deck.slides[sIdx].items[iIdx]) {
+        deck.slides[sIdx].items[iIdx][field] = value;
+      }
+    }
+
+    function renderCurrentSlide() {
+      if (!deck || !deck.slides.length) return;
+      const total = deck.slides.length;
+      const slide = deck.slides[currentIndex];
+      const canvas = document.getElementById('slideCanvas');
+
+      canvas.style.backgroundColor = currentTheme.bg;
+      canvas.className = `slide-canvas trans-${currentTransition}`;
+      canvas.innerHTML = renderSlideHTML(slide, currentIndex, total, currentTheme, true);
+
+      document.getElementById('slideCounter').textContent = `Diapositiva ${currentIndex + 1} / ${total}`;
+
+      const dots = document.getElementById('dotsContainer');
+      dots.innerHTML = deck.slides.map((_, idx) => `
+        <button onclick="goToSlide(${idx})" class="h-2 rounded-full transition-all ${idx === currentIndex ? 'w-6 bg-sky-400' : 'w-2 bg-slate-600'}"></button>
+      `).join('');
+
+      const pCanvas = document.getElementById('presentCanvas');
+      if (pCanvas && !document.getElementById('presentOverlay').classList.contains('hidden')) {
+        pCanvas.style.backgroundColor = currentTheme.bg;
+        pCanvas.className = `slide-canvas trans-${currentTransition}`;
+        pCanvas.innerHTML = renderSlideHTML(slide, currentIndex, total, currentTheme, false);
+        document.getElementById('presentCounter').textContent = `${currentIndex + 1} / ${total}`;
+      }
+
+      lucide.createIcons();
+      scaleAllStages();
+    }
+
+    function prevSlide() {
+      if (!deck) return;
+      currentIndex = (currentIndex - 1 + deck.slides.length) % deck.slides.length;
+      renderCurrentSlide();
+    }
+
+    function nextSlide() {
+      if (!deck) return;
+      currentIndex = (currentIndex + 1) % deck.slides.length;
+      renderCurrentSlide();
+    }
+
+    function goToSlide(idx) {
+      currentIndex = idx;
+      renderCurrentSlide();
+    }
+
+    // Modo Presentación Pantalla Completa + Swipe Táctil
+    function startPresentationMode() {
+      const overlay = document.getElementById('presentOverlay');
+      overlay.classList.replace('hidden', 'flex');
+      renderCurrentSlide();
+      setTimeout(scaleAllStages, 50);
+    }
+
+    function exitPresentationMode() {
+      document.getElementById('presentOverlay').classList.replace('flex', 'hidden');
+    }
+
+    let touchStartX = 0;
+    document.getElementById('presentOverlay').addEventListener('touchstart', e => {
+      touchStartX = e.changedTouches[0].screenX;
+    }, { passive: true });
+    document.getElementById('presentOverlay').addEventListener('touchend', e => {
+      const diff = e.changedTouches[0].screenX - touchStartX;
+      if (Math.abs(diff) > 45) diff < 0 ? nextSlide() : prevSlide();
+    }, { passive: true });
+
+    // Guardar archivo con selector nativo de carpeta (showSaveFilePicker) + respaldo
+    async function saveFileWithLocation(blob, suggestedName, mimeType, description, extension) {
+      if ('showSaveFilePicker' in window) {
+        try {
+          const handle = await window.showSaveFilePicker({
+            suggestedName,
+            types: [{
+              description,
+              accept: { [mimeType]: [extension] }
+            }]
+          });
+          const writable = await handle.createWritable();
+          await writable.write(blob);
+          await writable.close();
+          showToast(`Archivo guardado en la ubicación elegida`);
+          return;
+        } catch (err) {
+          if (err.name === 'AbortError') {
+            showToast('Guardado cancelado');
+            return;
+          }
+        }
+      }
+      // Respaldo estándar para navegadores sin File System Access API
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = suggestedName;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      setTimeout(() => URL.revokeObjectURL(url), 1500);
+      showToast(`Descargando ${suggestedName}...`);
+    }
+
+    // Exportar a PowerPoint Real (.pptx) con PptxGenJS
+    async function exportToPPTX() {
+      closeExportModal();
+      showToast('Generando archivo PowerPoint (.pptx)...');
+
+      const pptx = new PptxGenJS();
+      pptx.layout = 'LAYOUT_16x9';
+      pptx.title = deck.title;
+
+      const t = currentTheme;
+
+      deck.slides.forEach((s, idx) => {
+        const slide = pptx.addSlide();
+        slide.background = { color: t.pptBg };
+
+        // Etiqueta superior
+        slide.addText((s.tag || '').toUpperCase(), {
+          x: 0.6, y: 0.4, w: 4.5, h: 0.35,
+          fontSize: 10, bold: true, color: t.pptAccent, fontFace: 'Arial'
+        });
+
+        // Número de diapositiva
+        slide.addText(`${idx + 1} / ${deck.slides.length}`, {
+          x: 8.4, y: 0.4, w: 1.0, h: 0.35, align: 'right',
+          fontSize: 10, color: '94A3B8', fontFace: 'Arial'
+        });
+
+        if (s.layout === 'cover') {
+          slide.addText(s.title, {
+            x: 0.6, y: 1.5, w: 8.8, h: 1.5,
+            fontSize: 32, bold: true, color: t.pptText, fontFace: 'Arial', valign: 'middle'
+          });
+          slide.addText(s.subtitle || '', {
+            x: 0.6, y: 3.05, w: 8.5, h: 0.9,
+            fontSize: 15, color: 'CBD5E1', fontFace: 'Arial'
+          });
+          (s.items || []).slice(0, 3).forEach((it, i) => {
+            const xPos = 0.6 + i * 3.0;
+            slide.addShape(pptx.ShapeType.roundRect, { x: xPos, y: 4.2, w: 2.8, h: 0.9, fill: { color: t.pptCard }, rectRadius: 0.08 });
+            slide.addText(it.label.toUpperCase(), { x: xPos + 0.15, y: 4.28, w: 2.5, h: 0.3, fontSize: 9, bold: true, color: t.pptAccent });
+            slide.addText(it.value, { x: xPos + 0.15, y: 4.58, w: 2.5, h: 0.4, fontSize: 11, bold: true, color: t.pptText });
+          });
+          return;
+        }
+
+        // Título y subtítulo estándar
+        slide.addText(s.title, {
+          x: 0.6, y: 0.85, w: 8.8, h: 0.6,
+          fontSize: 22, bold: true, color: t.pptText, fontFace: 'Arial'
+        });
+        slide.addText(s.subtitle || '', {
+          x: 0.6, y: 1.45, w: 8.8, h: 0.45,
+          fontSize: 12, color: '94A3B8', fontFace: 'Arial'
+        });
+
+        if (s.layout === 'stats_bar' || s.layout === 'donut') {
+          const chartData = [{
+            name: s.title,
+            labels: (s.items || []).map(it => it.label.slice(0, 22)),
+            values: (s.items || []).map(it => Number(it.num) || 50)
+          }];
+          const chartType = s.layout === 'donut' ? pptx.ChartType.doughnut : pptx.ChartType.bar;
+          slide.addChart(chartType, chartData, {
+            x: 0.6, y: 2.05, w: 4.5, h: 3.0,
+            chartColors: [t.pptAccent, '818CF8', '34D399', 'FBBF24'],
+            showLegend: s.layout === 'donut',
+            legendPos: 'b',
+            dataLabelColor: t.pptText
+          });
+
+          (s.items || []).slice(0, 4).forEach((it, i) => {
+            const yPos = 2.05 + i * 0.75;
+            slide.addShape(pptx.ShapeType.roundRect, { x: 5.35, y: yPos, w: 4.05, h: 0.65, fill: { color: t.pptCard }, rectRadius: 0.06 });
+            slide.addText(`${it.label} (${it.num || 50}%)`, { x: 5.5, y: yPos + 0.06, w: 3.75, h: 0.25, fontSize: 11, bold: true, color: t.pptAccent });
+            slide.addText(it.value, { x: 5.5, y: yPos + 0.31, w: 3.75, h: 0.28, fontSize: 9.5, color: t.pptText });
+          });
+        } else {
+          const items = (s.items || []).slice(0, 3);
+          const colW = 2.8;
+          items.forEach((it, i) => {
+            const xPos = 0.6 + i * 3.0;
+            slide.addShape(pptx.ShapeType.roundRect, { x: xPos, y: 2.15, w: colW, h: 2.85, fill: { color: t.pptCard }, rectRadius: 0.08 });
+            slide.addText(it.label, { x: xPos + 0.18, y: 2.35, w: colW - 0.36, h: 0.5, fontSize: 14, bold: true, color: t.pptAccent });
+            slide.addText(it.value, { x: xPos + 0.18, y: 2.95, w: colW - 0.36, h: 1.85, fontSize: 11.5, color: t.pptText, valign: 'top' });
+          });
+        }
+      });
+
+      const blob = await pptx.write({ outputType: 'blob' });
+      const safeName = (deck.title || 'Presentacion').replace(/[^a-zA-Z0-9áéíóúÁÉÍÓÚñÑ_-]/g, '_').slice(0, 40);
+      await saveFileWithLocation(
+        blob,
+        `${safeName}.pptx`,
+        'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+        'Presentación PowerPoint',
+        '.pptx'
+      );
+    }
+
+    // Exportar HTML Interactivo Autocontenido
+    async function exportToHTML() {
+      closeExportModal();
+      const slidesMarkup = deck.slides.map((s, i) => `
+        <section class="slide" style="background:${currentTheme.bg}; display:${i === 0 ? 'flex' : 'none'};">
+          ${renderSlideHTML(s, i, deck.slides.length, currentTheme, false)}
+        </section>
+      `).join('');
+
+      const htmlDoc = `<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>${escapeHtml(deck.title)}</title>
+<script src="https://cdn.tailwindcss.com"><\/script>
+<script src="https://unpkg.com/lucide@latest"><\/script>
+<style>
+  body { margin:0; background:#000; display:flex; align-items:center; justify-content:center; height:100vh; overflow:hidden; font-family:system-ui,sans-serif; }
+  .slide { width:960px; height:540px; padding:40px 48px; flex-direction:column; justify-content:space-between; box-sizing:border-box; border-radius:12px; }
+  .controls { position:fixed; bottom:18px; background:rgba(15,23,42,.85); padding:8px 18px; border-radius:999px; color:#fff; display:flex; gap:16px; align-items:center; font-size:13px; }
+  button { background:#38bdf8; color:#0f172a; border:none; padding:5px 12px; border-radius:999px; font-weight:700; cursor:pointer; }
+</style>
+</head>
+<body>
+${slidesMarkup}
+<div class="controls">
+  <button onclick="nav(-1)">Anterior</button>
+  <span id="cnt">1 / ${deck.slides.length}</span>
+  <button onclick="nav(1)">Siguiente</button>
+</div>
+<script>
+  lucide.createIcons();
+  let idx = 0; const slides = document.querySelectorAll('.slide');
+  function nav(d){ slides[idx].style.display='none'; idx=(idx+d+slides.length)%slides.length; slides[idx].style.display='flex'; document.getElementById('cnt').textContent=(idx+1)+' / '+slides.length; }
+  document.addEventListener('keydown', e => { if(e.key==='ArrowRight') nav(1); if(e.key==='ArrowLeft') nav(-1); });
+<\/script>
+</body></html>`;
+
+      const blob = new Blob([htmlDoc], { type: 'text/html;charset=utf-8' });
+      const safeName = (deck.title || 'Presentacion').replace(/[^a-zA-Z0-9áéíóúÁÉÍÓÚñÑ_-]/g, '_').slice(0, 40);
+      await saveFileWithLocation(blob, `${safeName}_Interactiva.html`, 'text/html', 'Presentación Web HTML', '.html');
+    }
+
+    // Exportar PDF Horizontal
+    function exportToPDF() {
+      closeExportModal();
+      const printBox = document.getElementById('printContainer');
+      printBox.innerHTML = deck.slides.map((s, i) => `
+        <div class="print-page" style="background:${currentTheme.bg}; padding:40px 48px; display:flex; flex-direction:column; justify-content:space-between;">
+          ${renderSlideHTML(s, i, deck.slides.length, currentTheme, false)}
+        </div>
+      `).join('');
+      printBox.classList.remove('hidden');
+      lucide.createIcons();
+      setTimeout(() => {
+        window.print();
+        printBox.classList.add('hidden');
+      }, 350);
+    }
+  </script>
+</body>
+</html>
