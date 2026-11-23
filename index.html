@@ -7,7 +7,7 @@
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="apple-mobile-web-app-title" content="SlideCraft AI" />
-  <title>SlideCraft AI — Estudio de Presentaciones PWA</title>
+  <title>SlideCraft AI — Estudio Visual de Presentaciones PWA</title>
   <link rel="manifest" href="./manifest.json" />
   <link rel="icon" type="image/svg+xml" href="./icon.svg" />
   <link rel="apple-touch-icon" href="./icon.svg" />
@@ -46,7 +46,7 @@
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      padding: 36px 46px;
+      padding: 34px 44px;
       user-select: none;
     }
 
@@ -64,12 +64,12 @@
 
     /* Animaciones de letras, tarjetas, imágenes y gráficos */
     @keyframes letterPop {
-      0% { opacity: 0; transform: translateY(16px) scale(0.96); filter: blur(3px); }
+      0% { opacity: 0; transform: translateY(15px) scale(0.97); filter: blur(2px); }
       100% { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
     }
     @keyframes cardEntrance {
-      0% { opacity: 0; transform: translateY(20px) scale(0.95); }
-      70% { opacity: 1; transform: translateY(-2px) scale(1.01); }
+      0% { opacity: 0; transform: translateY(18px) scale(0.96); }
+      72% { opacity: 1; transform: translateY(-2px) scale(1.01); }
       100% { opacity: 1; transform: translateY(0) scale(1); }
     }
     @keyframes slideFromRight {
@@ -77,7 +77,7 @@
       100% { opacity: 1; transform: translateX(0); }
     }
     @keyframes zoomPulseIn {
-      0% { opacity: 0; transform: scale(0.92); }
+      0% { opacity: 0; transform: scale(0.93); }
       100% { opacity: 1; transform: scale(1); }
     }
     @keyframes barGrow {
@@ -90,10 +90,10 @@
     }
     @keyframes floatSoft {
       0%, 100% { transform: translateY(0px); }
-      50% { transform: translateY(-6px); }
+      50% { transform: translateY(-5px); }
     }
     @keyframes visualReveal {
-      0% { opacity: 0; transform: scale(0.93) translateY(12px); }
+      0% { opacity: 0; transform: scale(0.94) translateY(10px); }
       100% { opacity: 1; transform: scale(1) translateY(0); }
     }
 
@@ -116,7 +116,7 @@
       transform-box: fill-box;
       transform-origin: left center;
       transform: scaleX(0);
-      animation: barGrow 0.75s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+      animation: barGrow 0.78s cubic-bezier(0.22, 1, 0.36, 1) forwards;
       animation-delay: var(--delay, 180ms);
     }
     .anim-svg-stroke {
@@ -284,7 +284,7 @@
         <button id="generateBtn" onclick="generateDeck()"
           class="w-full py-3 rounded-xl bg-gradient-to-r from-sky-500 via-indigo-500 to-violet-600 hover:from-sky-400 hover:to-violet-500 font-bold text-sm text-white shadow-lg shadow-sky-600/25 flex items-center justify-center gap-2 transition active:scale-[0.99]">
           <i data-lucide="sparkles" class="w-4 h-4"></i>
-          <span>Generar Presentación con Imágenes y Gráficos</span>
+          <span>Generar Presentación Optimista y Visual</span>
         </button>
       </section>
 
@@ -379,7 +379,7 @@
         </h3>
         <button onclick="closeExportModal()" class="text-slate-400 hover:text-white"><i data-lucide="x" class="w-5 h-5"></i></button>
       </div>
-      <p class="text-xs text-slate-400">Exporta conservando imágenes temáticas, iconos, gráficos y estructura idéntica al diseño original.</p>
+      <p class="text-xs text-slate-400">Conserva ilustraciones temáticas, iconos, gráficos y animaciones fieles al diseño original.</p>
 
       <div class="space-y-2.5">
         <button onclick="exportToPPTX()" class="w-full p-3.5 rounded-xl bg-slate-800 hover:bg-slate-750 border border-slate-700 hover:border-sky-500 flex items-center justify-between text-left transition">
@@ -387,7 +387,7 @@
             <div class="w-10 h-10 rounded-lg bg-orange-500/20 text-orange-400 flex items-center justify-center font-bold text-xs">PPTX</div>
             <div>
               <div class="text-sm font-bold text-white">PowerPoint Fiel (.pptx)</div>
-              <div class="text-[11px] text-slate-400">Con ilustraciones, gráficos y textos editables</div>
+              <div class="text-[11px] text-slate-400">Ilustraciones y gráficos en alta definición + texto editable</div>
             </div>
           </div>
           <i data-lucide="chevron-right" class="w-4 h-4 text-slate-400"></i>
@@ -397,8 +397,8 @@
           <div class="flex items-center gap-3">
             <div class="w-10 h-10 rounded-lg bg-sky-500/20 text-sky-400 flex items-center justify-center font-bold text-xs">HTML</div>
             <div>
-              <div class="text-sm font-bold text-white">Presentación Web Idéntica (.html)</div>
-              <div class="text-[11px] text-slate-400">Misma estética, imágenes, iconos y animaciones</div>
+              <div class="text-sm font-bold text-white">Presentación Web Animada (.html)</div>
+              <div class="text-[11px] text-slate-400">Misma estética, ilustraciones, iconos y animaciones</div>
             </div>
           </div>
           <i data-lucide="chevron-right" class="w-4 h-4 text-slate-400"></i>
@@ -428,7 +428,7 @@
         <button onclick="closeSettingsModal()" class="text-slate-400 hover:text-white"><i data-lucide="x" class="w-5 h-5"></i></button>
       </div>
       <p class="text-xs text-slate-300 leading-relaxed">
-        Ingresa tu <strong>API Key de Google Gemini</strong> (opcional) para generar contenido profundo adaptado a cada tema. Sin clave, la app usa su motor visual local.
+        Ingresa tu <strong>API Key de Google Gemini</strong> (opcional) para redactar análisis todavía más específicos y adaptados a tu tema. Sin clave, el motor local genera estructuras coherentes y constructivas vinculadas a tu tema, contexto y propósito.
       </p>
       <input id="apiKeyInput" type="password" placeholder="AIzaSy..."
         class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm text-white outline-none focus:border-sky-500" />
@@ -472,7 +472,7 @@
       corporate: { bg: '#0f172a', card: '#1e293b', text: '#f8fafc', muted: '#94a3b8', accent: '#38bdf8', accent2: '#818cf8', pptBg: '0F172A', pptCard: '1E293B', pptText: 'F8FAFC', pptAccent: '38BDF8' },
       emerald:   { bg: '#062c24', card: '#0d3d33', text: '#ecfdf5', muted: '#a7f3d0', accent: '#34d399', accent2: '#fbbf24', pptBg: '062C24', pptCard: '0D3D33', pptText: 'ECFDF5', pptAccent: '34D399' },
       royal:     { bg: '#17153b', card: '#2e236c', text: '#f5f3ff', muted: '#c4b5fd', accent: '#a78bfa', accent2: '#f472b6', pptBg: '17153B', pptCard: '2E236C', pptText: 'F5F3FF', pptAccent: 'A78BFA' },
-      amber:     { bg: '#1c1917', card: '#292524', text: '#fafaf9', muted: '#d6d3d1', accent: '#fb923c', accent2: '#facc15', pptBg: '1C1917', pptCard: '292524', pptText: 'FAFAF9', pptAccent: 'FB923C' },
+      amber:     { bg: '#1c1917', card: '#292524', text: '#fafaf9', muted: '#d6d3d1', accent: '#fb923c', accent2: '#facc15', pptBg: '1C1917', pptCard: '292524', pptText: 'FAFDF9', pptAccent: 'FB923C' },
       light:     { bg: '#f8fafc', card: '#ffffff', text: '#0f172a', muted: '#475569', accent: '#0284c7', accent2: '#4f46e5', pptBg: 'F8FAFC', pptCard: 'FFFFFF', pptText: '0F172A', pptAccent: '0284C7' }
     };
 
@@ -805,7 +805,7 @@
 
       const btn = document.getElementById('generateBtn');
       btn.disabled = true;
-      btn.innerHTML = `<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i><span>Generando imágenes, gráficos y diapositivas...</span>`;
+      btn.innerHTML = `<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i><span>Construyendo contenido, imágenes y gráficos...</span>`;
       lucide.createIcons();
 
       const apiKey = localStorage.getItem(STORAGE_KEY_API);
@@ -816,7 +816,7 @@
           generated = await fetchFromGemini(apiKey, topic, context, purpose, count, currentDomain);
         } else {
           await new Promise(r => setTimeout(r, 550));
-          generated = buildDomainAdaptiveDeck(topic, context, purpose, count, currentDomain);
+          generated = buildOptimisticCoherentDeck(topic, context, purpose, count, currentDomain);
         }
 
         deck = {
@@ -835,10 +835,10 @@
         document.getElementById('workspaceSection').classList.remove('hidden');
         renderCurrentSlide();
         setTimeout(scaleAllStages, 50);
-        showToast('Presentación creada y guardada en tu biblioteca');
+        showToast('Presentación generada con enfoque constructivo y guardada');
       } catch (err) {
         console.error(err);
-        const fallback = buildDomainAdaptiveDeck(topic, context, purpose, count, currentDomain);
+        const fallback = buildOptimisticCoherentDeck(topic, context, purpose, count, currentDomain);
         deck = {
           id: 'deck_' + Date.now(),
           title: fallback.title,
@@ -857,35 +857,40 @@
         showToast('Generada con motor visual local');
       } finally {
         btn.disabled = false;
-        btn.innerHTML = `<i data-lucide="sparkles" class="w-4 h-4"></i><span>Generar Presentación con Imágenes y Gráficos</span>`;
+        btn.innerHTML = `<i data-lucide="sparkles" class="w-4 h-4"></i><span>Generar Presentación Optimista y Visual</span>`;
         lucide.createIcons();
       }
     }
 
     async function fetchFromGemini(apiKey, topic, context, purpose, count, domain) {
       const profile = DOMAIN_PROFILES[domain] || DOMAIN_PROFILES.business;
-      const prompt = `Crea una presentación ejecutiva en español sobre: "${topic}".
+      const prompt = `Crea una presentación ejecutiva, constructiva, precisa y optimista en español sobre el tema: "${topic}".
 Dominio temático: ${profile.name}.
-Contexto/Audiencia: "${context || 'Audiencia profesional'}".
-Propósito: "${purpose || 'Informar y proponer pasos claros'}".
+Contexto y audiencia: "${context || 'Audiencia comprometida con la mejora continua y el crecimiento'}".
+Propósito específico: "${purpose || 'Generar claridad, confianza y un plan de acción viable'}".
 Número exacto de diapositivas: ${count}.
+
+Criterios de calidad:
+- Mantén congruencia directa con el tema, contexto y propósito indicados; evita rellenos vagos o clichés vacíos.
+- Adopta un tono optimista, realista y orientado a soluciones, fortalezas y oportunidades verificables.
+- Cada ítem debe aportar información útil y específica (no frases genéricas repetidas).
 
 Devuelve ÚNICAMENTE JSON válido con esta estructura:
 {
-  "title": "Título corto",
+  "title": "Título claro y atractivo",
   "slides": [
     {
       "layout": "cover | visual_story | stats_bar | funnel | gauges | trend_area | quote_focus | donut | timeline | closing",
-      "tag": "Etiqueta corta (máx 22 chars)",
-      "title": "Título de slide (máx 56 chars)",
-      "subtitle": "Subtítulo claro (máx 110 chars)",
+      "tag": "Etiqueta breve (máx 24 chars)",
+      "title": "Título específico de diapositiva (máx 60 chars)",
+      "subtitle": "Subtítulo con sentido y conexión al tema (máx 120 chars)",
       "items": [
-        { "label": "Título breve (máx 28 chars)", "value": "Detalle conciso (máx 82 chars)", "num": 78, "icon": "${profile.icons[0]}" }
+        { "label": "Eje o dato clave (máx 30 chars)", "value": "Explicación concreta y útil (máx 92 chars)", "num": 82, "icon": "${profile.icons[0]}" }
       ]
     }
   ]
 }
-Incluye "visual_story" y variedad de layouts ("cover", "visual_story", "funnel", "gauges", "trend_area", "stats_bar", "donut", "timeline", "closing"), iconos válidos de Lucide y valores numéricos "num" entre 15 y 95.`;
+Usa variedad de layouts ("cover", "visual_story", "funnel", "gauges", "trend_area", "stats_bar", "donut", "timeline", "closing"), iconos válidos de Lucide y valores numéricos "num" coherentes entre 20 y 96.`;
 
       const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${encodeURIComponent(apiKey)}`, {
         method: 'POST',
@@ -901,214 +906,216 @@ Incluye "visual_story" y variedad de layouts ("cover", "visual_story", "funnel",
       return JSON.parse(data.candidates[0].content.parts[0].text);
     }
 
-    function buildDomainAdaptiveDeck(topic, context, purpose, count, domain) {
+    // Constructor local rico, optimista y congruente con tema, contexto y propósito
+    function buildOptimisticCoherentDeck(topic, context, purpose, count, domain) {
       const prof = DOMAIN_PROFILES[domain] || DOMAIN_PROFILES.business;
       const ic = prof.icons;
-      const ctx = context || `Análisis aplicado a ${topic}`;
-      const purp = purpose || `Definir prioridades y ejecución efectiva en ${topic}`;
-      const shortTopic = topic.length > 34 ? topic.slice(0, 34) + '…' : topic;
+      const cleanTopic = topic.trim();
+      const ctx = (context || `Aplicado a ${cleanTopic} para impulsar avances claros y sostenibles`).trim();
+      const purp = (purpose || `Convertir ${cleanTopic} en decisiones acertadas y resultados tangibles`).trim();
+      const shortT = cleanTopic.length > 36 ? cleanTopic.slice(0, 36) + '…' : cleanTopic;
 
-      const domainTemplates = {
+      const domainPacks = {
         tech: {
-          tagCover: 'ARQUITECTURA E INNOVACIÓN',
+          tagCover: 'INNOVACIÓN Y CAPACIDAD',
           s2: {
             layout: 'visual_story',
-            tag: 'ESCENARIO TECNOLÓGICO',
-            title: `Transformación Digital: ${shortTopic}`,
-            subtitle: 'Integración de sistemas inteligentes, flujos automatizados y datos confiables.',
+            tag: 'POTENCIAL APLICADO',
+            title: `Cómo ${shortT} Potencia Resultados`,
+            subtitle: `Enfocado en ${ctx.slice(0, 72)} para lograr ${purp.slice(0, 65)}.`,
             items: [
-              { label: 'Arquitectura Modular', value: 'Componentes conectados con baja fricción y alta trazabilidad.', num: 88, icon: ic[0] },
-              { label: 'Automatización Activa', value: 'Flujos repetitivos resueltos con supervisión y control.', num: 82, icon: ic[1] },
-              { label: 'Decisión Basada en Datos', value: 'Métricas en tiempo real para mejorar el rendimiento.', num: 90, icon: ic[5] }
+              { label: 'Velocidad con Calidad', value: `Automatiza tareas repetitivas en torno a ${shortT} y libera tiempo para el criterio humano.`, num: 88, icon: ic[0] },
+              { label: 'Precisión y Trazabilidad', value: 'Facilita decisiones respaldadas por información clara, ordenada y verificable.', num: 85, icon: ic[5] },
+              { label: 'Escalabilidad Progresiva', value: 'Permite comenzar con un piloto ágil y crecer sin rehacer los procesos base.', num: 90, icon: ic[1] }
             ]
           },
           s3: {
             layout: 'gauges',
-            tag: 'CAPACIDAD DEL SISTEMA',
-            title: 'Indicadores de Madurez Técnica',
-            subtitle: 'Evaluación de rendimiento, escalabilidad y continuidad operativa.',
+            tag: 'FORTALEZAS CLAVE',
+            title: `Pilares de Adopción en ${shortT}`,
+            subtitle: 'Condiciones favorables que aceleran una implementación segura y constructiva.',
             items: [
-              { label: 'Automatización', value: 'Reducción de tareas manuales repetitivas', num: 86, icon: ic[0] },
-              { label: 'Escalabilidad', value: 'Soporte ante crecimiento de demanda', num: 78, icon: ic[1] },
-              { label: 'Confiabilidad', value: 'Estabilidad y continuidad del servicio', num: 92, icon: ic[2] }
+              { label: 'Facilidad de Uso', value: 'Adopción progresiva mediante flujos intuitivos y apoyo práctico.', num: 86, icon: ic[0] },
+              { label: 'Adaptabilidad', value: 'Ajuste flexible a las necesidades reales de cada equipo o entorno.', num: 82, icon: ic[2] },
+              { label: 'Impacto Acumulativo', value: 'Cada mejora se suma a la siguiente elevando el estándar general.', num: 91, icon: ic[1] }
             ]
           },
           s4: {
             layout: 'trend_area',
-            tag: 'CURVA DE ADOPCIÓN',
-            title: 'Evolución del Impacto Operativo',
-            subtitle: 'Proyección progresiva desde el despliegue inicial hasta la optimización.',
+            tag: 'PROYECCIÓN DE AVANCE',
+            title: `Trayectoria de Valor: ${shortT}`,
+            subtitle: 'Evolución esperada al sostener una práctica constante y enfocada.',
             items: [
-              { label: 'Mes 1: Base', value: 'Configuración y pruebas iniciales', num: 28, icon: ic[3] },
-              { label: 'Mes 2: Integración', value: 'Conexión con flujos existentes', num: 54, icon: ic[4] },
-              { label: 'Mes 3: Aceleración', value: 'Automatización de procesos clave', num: 76, icon: ic[1] },
-              { label: 'Mes 4: Escala', value: 'Optimización continua con métricas', num: 93, icon: ic[5] }
+              { label: 'Inicio', value: 'Alineación del objetivo y selección del caso inicial', num: 32, icon: ic[3] },
+              { label: 'Validación', value: 'Primeras pruebas exitosas y ajustes de flujo', num: 58, icon: ic[4] },
+              { label: 'Expansión', value: 'Integración en las actividades clave del proyecto', num: 79, icon: ic[1] },
+              { label: 'Consolidación', value: 'Operación fluida con alto retorno y autonomía', num: 94, icon: ic[5] }
             ]
           }
         },
         education: {
-          tagCover: 'FORMACIÓN Y BIENESTAR',
+          tagCover: 'CRECIMIENTO Y PROPÓSITO',
           s2: {
             layout: 'visual_story',
-            tag: 'ENTORNO FORMATIVO',
-            title: `Acompañamiento Integral: ${shortTopic}`,
-            subtitle: 'Uniendo claridad conceptual, cercanía humana y aplicación práctica.',
+            tag: 'IMPACTO HUMANO',
+            title: `Aporte Constructivo de ${shortT}`,
+            subtitle: `Diseñado para ${ctx.slice(0, 72)} con miras a ${purp.slice(0, 65)}.`,
             items: [
-              { label: 'Comprensión Activa', value: 'Conectar ideas clave con experiencias reales y prácticas.', num: 88, icon: ic[0] },
-              { label: 'Acompañamiento Cercano', value: 'Seguimiento humano para fortalecer cada etapa del proceso.', num: 84, icon: ic[4] },
-              { label: 'Hábitos Duraderos', value: 'Aprendizajes que se sostienen en la práctica cotidiana.', num: 90, icon: ic[5] }
+              { label: 'Claridad y Sentido', value: `Ordena los conceptos esenciales de ${shortT} para facilitar su comprensión real.`, num: 90, icon: ic[0] },
+              { label: 'Acompañamiento Efectivo', value: 'Fortalece el diálogo, la confianza y el avance paso a paso de cada persona.', num: 87, icon: ic[4] },
+              { label: 'Transferencia Práctica', value: 'Promueve hábitos y recursos aplicables de inmediato en el contexto diario.', num: 89, icon: ic[5] }
             ]
           },
           s3: {
             layout: 'quote_focus',
-            tag: 'PRINCIPIO CENTRAL',
-            title: 'El Valor del Propósito Compartido',
-            subtitle: 'El crecimiento real ocurre cuando el conocimiento se vuelve práctica con sentido.',
+            tag: 'VISIÓN INSPIRADORA',
+            title: `Cultivando Avances en ${shortT}`,
+            subtitle: `Cuando ${shortT} se aborda con claridad, empatía y método, cada etapa abre nuevas oportunidades de crecimiento.`,
             items: [
-              { label: 'Claridad Pedagógica', value: 'Mensajes ordenados, accesibles y orientados a la acción.', num: 89, icon: ic[0] },
-              { label: 'Bienestar y Cuidado', value: 'Entorno respetuoso que impulsa seguridad y confianza.', num: 91, icon: ic[1] },
-              { label: 'Evaluación Formativa', value: 'Retroalimentación oportuna para mejorar continuamente.', num: 83, icon: ic[2] }
+              { label: 'Enfoque en Fortalezas', value: 'Reconoce lo que ya funciona y construye sobre bases sólidas.', num: 88, icon: ic[3] },
+              { label: 'Estructura Accesible', value: 'Evita tecnicismos innecesarios para que el mensaje sea claro y útil.', num: 86, icon: ic[2] },
+              { label: 'Sostenibilidad', value: 'Genera aprendizajes duraderos que acompañan el proceso a largo plazo.', num: 92, icon: ic[5] }
             ]
           },
           s4: {
             layout: 'stats_bar',
-            tag: 'INDICADORES FORMATIVOS',
-            title: 'Avance en Comprensión y Práctica',
-            subtitle: 'Comparativa de indicadores clave durante la implementación.',
+            tag: 'RESULTADOS POSITIVOS',
+            title: `Indicadores de Progreso en ${shortT}`,
+            subtitle: 'Avances esperados al aplicar una metodología clara y participativa.',
             items: [
-              { label: 'Participación Activa', value: 'Mayor involucramiento y diálogo significativo', num: 87, icon: ic[3] },
-              { label: 'Retención de Ideas', value: 'Aplicación clara de los fundamentos tratados', num: 82, icon: ic[0] },
-              { label: 'Bienestar Integral', value: 'Entorno seguro, motivador y estructurado', num: 91, icon: ic[1] },
-              { label: 'Autonomía Práctica', value: 'Capacidad de transferir lo aprendido al día a día', num: 79, icon: ic[2] }
+              { label: 'Comprensión Clave', value: 'Mayor claridad sobre ideas centrales y su aplicación práctica', num: 89, icon: ic[0] },
+              { label: 'Participación Activa', value: 'Mayor compromiso y aporte constructivo de los participantes', num: 85, icon: ic[4] },
+              { label: 'Confianza y Claridad', value: 'Seguridad para avanzar con criterios bien definidos', num: 91, icon: ic[1] },
+              { label: 'Continuidad', value: 'Capacidad de sostener el avance más allá del momento inicial', num: 84, icon: ic[5] }
             ]
           }
         },
         marketing: {
-          tagCover: 'CRECIMIENTO Y CONVERSIÓN',
+          tagCover: 'OPORTUNIDAD Y CRECIMIENTO',
           s2: {
             layout: 'funnel',
-            tag: 'EMBUDO DE IMPACTO',
-            title: `Ruta de Conversión: ${shortTopic}`,
-            subtitle: 'Desde la visibilidad inicial hasta la fidelización y recomendación.',
+            tag: 'RUTA DE VALOR',
+            title: `Cómo Conectar y Convertir con ${shortT}`,
+            subtitle: `Orientado a ${ctx.slice(0, 70)} para lograr ${purp.slice(0, 65)}.`,
             items: [
-              { label: 'Descubrimiento', value: 'Alcance de audiencia relevante con mensaje claro', num: 95, icon: ic[0] },
-              { label: 'Interés y Valor', value: 'Demostración de beneficios tangibles y casos reales', num: 72, icon: ic[1] },
-              { label: 'Decisión', value: 'Propuesta clara que reduce dudas y fricción', num: 48, icon: ic[4] },
-              { label: 'Fidelización', value: 'Experiencia memorable que genera recurrencia', num: 34, icon: ic[3] }
+              { label: 'Visibilidad Relevante', value: `Atraer a quienes realmente valoran lo que aporta ${shortT}.`, num: 94, icon: ic[0] },
+              { label: 'Propuesta Clara', value: 'Comunicar beneficios concretos y fáciles de entender a primera vista.', num: 74, icon: ic[1] },
+              { label: 'Confianza y Decisión', value: 'Resolver dudas clave con transparencia, pruebas y cercanía.', num: 52, icon: ic[3] },
+              { label: 'Relación Duradera', value: 'Fidelizar y generar recomendaciones naturales por la calidad entregada.', num: 38, icon: ic[2] }
             ]
           },
           s3: {
             layout: 'visual_story',
-            tag: 'PROPUESTA DE VALOR',
-            title: 'Conexión Genuina con la Audiencia',
-            subtitle: 'Mensajes claros, ofertas relevantes y seguimiento constante.',
+            tag: 'VENTAJA DIFERENCIAL',
+            title: `Diferenciación Genuina en ${shortT}`,
+            subtitle: 'Construir autoridad y preferencia mediante valor real y constancia.',
             items: [
-              { label: 'Mensaje Enfocado', value: 'Hablar directo a la necesidad real del público.', num: 90, icon: ic[0] },
-              { label: 'Prueba y Confianza', value: 'Evidencia clara que respalda cada promesa.', num: 84, icon: ic[3] },
-              { label: 'Crecimiento Sostenido', value: 'Conversión recurrente con menor costo de adquisición.', num: 78, icon: ic[2] }
+              { label: 'Mensaje Auténtico', value: 'Enfocarse en soluciones útiles antes que en promesas vacías.', num: 88, icon: ic[0] },
+              { label: 'Experiencia Coherente', value: 'Alinear cada punto de contacto con el propósito de la propuesta.', num: 85, icon: ic[4] },
+              { label: 'Impulso Sostenido', value: 'Optimizar continuamente lo que genera mejor respuesta y engagement.', num: 82, icon: ic[5] }
             ]
           },
           s4: {
             layout: 'donut',
-            tag: 'INVERSIÓN POR CANAL',
-            title: 'Distribución Estratégica de Esfuerzos',
-            subtitle: 'Balance de recursos para maximizar retorno y alcance.',
+            tag: 'ENFOQUE DE ESFUERZO',
+            title: 'Distribución Estratégica para Crecer',
+            subtitle: 'Balance equilibrado entre atracción, conversión y retención.',
             items: [
-              { label: 'Contenido y Valor', value: 'Atracción orgánica y autoridad temática', num: 40, icon: ic[0] },
-              { label: 'Activación Directa', value: 'Conversión y seguimiento de oportunidades', num: 35, icon: ic[2] },
-              { label: 'Retención y Marca', value: 'Comunidad y referidos sostenidos', num: 25, icon: ic[3] }
+              { label: 'Valor y Alcance', value: 'Contenido útil que posiciona y atrae audiencia afín', num: 40, icon: ic[0] },
+              { label: 'Conversión Directa', value: 'Acciones claras que invitan a dar el siguiente paso', num: 35, icon: ic[4] },
+              { label: 'Fidelización', value: 'Seguimiento cercano que multiplica referidos', num: 25, icon: ic[2] }
             ]
           }
         },
         editorial: {
-          tagCover: 'VISIÓN Y LIDERAZGO',
+          tagCover: 'VISIÓN, SENTIDO Y LIDERAZGO',
           s2: {
             layout: 'quote_focus',
-            tag: 'CLAVE DE DIRECCIÓN',
-            title: `Sentido y Propósito: ${shortTopic}`,
-            subtitle: 'La coherencia entre lo que se afirma, lo que se decide y lo que se practica define la confianza.',
+            tag: 'HORIZONTE DE SENTIDO',
+            title: `Dirección y Propósito: ${shortT}`,
+            subtitle: `Un liderazgo sólido en ${shortT} une convicción clara, criterio humano y pasos concretos para ${purp.slice(0, 65)}.`,
             items: [
-              { label: 'Claridad de Rumbo', value: 'Objetivos transparentes que orientan las decisiones diarias.', num: 90, icon: ic[0] },
-              { label: 'Integridad Operativa', value: 'Coherencia entre principios declarados y acciones reales.', num: 88, icon: ic[1] },
-              { label: 'Inspiración Colectiva', value: 'Cultura que impulsa responsabilidad y compromiso.', num: 85, icon: ic[4] }
+              { label: 'Claridad de Rumbo', value: 'Define con precisión qué importa ahora y hacia dónde avanzamos.', num: 90, icon: ic[0] },
+              { label: 'Coherencia Práctica', value: 'Alinea las decisiones cotidianas con los principios declarados.', num: 88, icon: ic[1] },
+              { label: 'Unidad y Ánimo', value: 'Inspira confianza y corresponsabilidad en quienes participan.', num: 87, icon: ic[4] }
             ]
           },
           s3: {
             layout: 'visual_story',
-            tag: 'CULTURA Y SERVICIO',
-            title: 'Liderazgo que Ordena e Inspira',
-            subtitle: 'Dirección firme con empatía, estructura y visión de largo plazo.',
+            tag: 'CULTURA CONSTRUCTIVA',
+            title: `Construyendo Confianza con ${shortT}`,
+            subtitle: `Pensado para ${ctx.slice(0, 74)}.`,
             items: [
-              { label: 'Escucha y Criterio', value: 'Decisiones ponderadas que consideran el contexto real.', num: 87, icon: ic[2] },
-              { label: 'Estructura Clara', value: 'Roles definidos que evitan ambigüedad y desgaste.', num: 84, icon: ic[0] },
-              { label: 'Legado Sostenible', value: 'Principios vivos que trascienden una sola etapa.', num: 92, icon: ic[4] }
+              { label: 'Escucha y Criterio', value: 'Interpreta el contexto con sensibilidad y objetividad.', num: 86, icon: ic[3] },
+              { label: 'Orden y Responsabilidad', value: 'Establece acuerdos claros que facilitan el trabajo en equipo.', num: 84, icon: ic[5] },
+              { label: 'Legado Positivo', value: 'Deja bases firmes que fortalecen el futuro del grupo.', num: 92, icon: ic[4] }
             ]
           },
           s4: {
             layout: 'trend_area',
-            tag: 'CONSOLIDACIÓN CULTURAL',
-            title: 'Crecimiento Sostenido de Cohesión',
-            subtitle: 'Progresión esperada al alinear visión, comunicación y práctica.',
+            tag: 'MADUREZ PROGRESIVA',
+            title: `Consolidación del Propósito: ${shortT}`,
+            subtitle: 'Crecimiento gradual y sólido a medida que se integra en la práctica.',
             items: [
-              { label: 'Semana 1', value: 'Diálogo y alineación de expectativas', num: 30, icon: ic[2] },
-              { label: 'Semana 2', value: 'Acuerdos claros y roles visibles', num: 58, icon: ic[3] },
-              { label: 'Semana 3', value: 'Práctica constante en equipo', num: 78, icon: ic[4] },
-              { label: 'Semana 4', value: 'Cultura consolidada y replicable', num: 92, icon: ic[5] }
+              { label: 'Etapa 1', value: 'Inspiración y claridad de fundamentos', num: 35, icon: ic[3] },
+              { label: 'Etapa 2', value: 'Diálogo y acuerdos compartidos', num: 60, icon: ic[0] },
+              { label: 'Etapa 3', value: 'Práctica constante y acompañamiento', num: 80, icon: ic[1] },
+              { label: 'Etapa 4', value: 'Cultura madura y replicable', num: 93, icon: ic[4] }
             ]
           }
         },
         business: {
-          tagCover: 'PLAN ESTRATÉGICO',
+          tagCover: 'ESTRATEGIA Y OPORTUNIDAD',
           s2: {
             layout: 'visual_story',
-            tag: 'VISIÓN ESTRATÉGICA',
-            title: `Eje Central: ${shortTopic}`,
-            subtitle: 'Alineación entre diagnóstico objetivo, ejecución disciplinada y resultados.',
+            tag: 'ENFOQUE ESTRATÉGICO',
+            title: `Valor Clave de ${shortT}`,
+            subtitle: `Alineado con ${ctx.slice(0, 70)} para cumplir: ${purp.slice(0, 65)}.`,
             items: [
-              { label: 'Diagnóstico Preciso', value: 'Identificar puntos de palanca y cuellos de botella reales.', num: 85, icon: ic[0] },
-              { label: 'Ejecución Disciplinada', value: 'Convertir planes en acciones verificables con responsables.', num: 88, icon: ic[2] },
-              { label: 'Sostenibilidad', value: 'Asegurar impacto duradero sin comprometer recursos.', num: 82, icon: ic[3] }
+              { label: 'Oportunidad Concreta', value: `Identifica cómo ${shortT} mejora la eficacia y abre nuevas posibilidades.`, num: 88, icon: ic[1] },
+              { label: 'Ejecución Ordenada', value: 'Transforma ideas en acciones medibles con prioridades claras.', num: 86, icon: ic[2] },
+              { label: 'Respaldo y Control', value: 'Combina iniciativa optimista con seguimiento objetivo de avance.', num: 84, icon: ic[3] }
             ]
           },
           s3: {
             layout: 'stats_bar',
-            tag: 'MÉTRICAS DE DESEMPEÑO',
-            title: 'Indicadores Clave de Desempeño',
-            subtitle: 'Medición objetiva del avance y retorno sobre la iniciativa.',
+            tag: 'IMPACTO ESPERADO',
+            title: `Métricas de Avance: ${shortT}`,
+            subtitle: 'Indicadores clave para evaluar progreso, calidad y retorno.',
             items: [
-              { label: 'Eficiencia Operativa', value: 'Optimización de tiempos y recursos asignados', num: 84, icon: ic[1] },
-              { label: 'Cumplimiento de Metas', value: 'Alineación con entregables clave del periodo', num: 89, icon: ic[2] },
-              { label: 'Control de Riesgos', value: 'Identificación temprana y mitigación activa', num: 76, icon: ic[3] },
-              { label: 'Valor Generado', value: 'Impacto directo en el propósito establecido', num: 82, icon: ic[4] }
+              { label: 'Eficiencia Operativa', value: 'Mejor aprovechamiento del tiempo y de los recursos disponibles', num: 86, icon: ic[1] },
+              { label: 'Alineación al Objetivo', value: 'Coherencia directa entre las tareas diarias y el propósito', num: 90, icon: ic[2] },
+              { label: 'Calidad de Ejecución', value: 'Estándares consistentes y reducción de cuellos de botella', num: 84, icon: ic[3] },
+              { label: 'Capacidad de Escala', value: 'Base preparada para ampliar resultados de forma ordenada', num: 81, icon: ic[4] }
             ]
           },
           s4: {
             layout: 'funnel',
-            tag: 'PRIORIZACIÓN EJECUTIVA',
-            title: 'Filtro de Iniciativas de Alto Impacto',
-            subtitle: 'Enfoque selectivo desde ideas iniciales hasta ejecución prioritaria.',
+            tag: 'PRIORIZACIÓN EFECTIVA',
+            title: `Selección de Acciones de Alto Impacto`,
+            subtitle: 'Concentrar energía donde mayor valor se genera para el objetivo.',
             items: [
-              { label: 'Oportunidades Identificadas', value: 'Levantamiento amplio de mejoras posibles', num: 90, icon: ic[0] },
-              { label: 'Viabilidad Evaluada', value: 'Análisis de recursos, tiempo y factibilidad', num: 66, icon: ic[4] },
-              { label: 'Proyectos Priorizados', value: 'Selección de iniciativas con mayor retorno', num: 44, icon: ic[2] },
-              { label: 'Ejecución Inmediata', value: 'Despliegue con responsables y fechas claras', num: 28, icon: ic[1] }
+              { label: 'Ideas y Oportunidades', value: 'Identificación amplia de mejoras aplicables', num: 92, icon: ic[0] },
+              { label: 'Evaluación Práctica', value: 'Viabilidad real según recursos y alcance', num: 68, icon: ic[4] },
+              { label: 'Prioridades Clave', value: 'Selección de iniciativas con mayor impacto', num: 46, icon: ic[2] },
+              { label: 'Arranque Inmediato', value: 'Acciones listas para ejecutarse esta semana', num: 30, icon: ic[1] }
             ]
           }
         }
       };
 
-      const pack = domainTemplates[domain] || domainTemplates.business;
+      const pack = domainPacks[domain] || domainPacks.business;
 
       const slides = [
         {
           layout: 'cover',
           tag: pack.tagCover,
-          title: topic,
-          subtitle: `${ctx}. Objetivo: ${purp}`,
+          title: cleanTopic,
+          subtitle: `${ctx}. Propósito: ${purp}.`,
           items: [
-            { label: 'Contexto', value: ctx.slice(0, 38), num: 100, icon: ic[0] },
-            { label: 'Propósito', value: purp.slice(0, 38), num: 100, icon: ic[2] },
-            { label: 'Formato', value: `${prof.name} • ${count} slides`, num: 100, icon: ic[3] }
+            { label: 'Contexto', value: ctx.slice(0, 42), num: 100, icon: ic[0] },
+            { label: 'Propósito', value: purp.slice(0, 42), num: 100, icon: ic[2] },
+            { label: 'Perspectiva', value: `${prof.name} • Enfoque Positivo`, num: 100, icon: ic[1] }
           ]
         },
         pack.s2,
@@ -1116,25 +1123,25 @@ Incluye "visual_story" y variedad de layouts ("cover", "visual_story", "funnel",
         pack.s4,
         {
           layout: 'timeline',
-          tag: 'HOJA DE RUTA',
-          title: 'Fases de Implementación',
-          subtitle: 'Secuencia ordenada para pasar del análisis a resultados concretos.',
+          tag: 'PLAN DE ACCIÓN',
+          title: `Hoja de Ruta para ${shortT}`,
+          subtitle: 'Pasos graduales y realistas para avanzar con seguridad y claridad.',
           items: [
-            { label: 'Fase 1: Diagnóstico', value: 'Revisión de punto de partida, brechas y recursos disponibles.', num: 25, icon: ic[0] },
-            { label: 'Fase 2: Diseño y Piloto', value: 'Estructura del plan y prueba controlada con retroalimentación.', num: 60, icon: ic[1] },
-            { label: 'Fase 3: Despliegue', value: 'Implementación general con seguimiento de indicadores.', num: 85, icon: ic[2] },
-            { label: 'Fase 4: Consolidación', value: 'Evaluación de impacto, ajustes y estandarización.', num: 100, icon: ic[3] }
+            { label: '1. Claridad Inicial', value: 'Definir alcance, acuerdos y criterios de éxito compartidos.', num: 25, icon: ic[0] },
+            { label: '2. Implementación Piloto', value: 'Aplicar el plan en un espacio controlado y aprender rápido.', num: 55, icon: ic[1] },
+            { label: '3. Ajuste y Expansión', value: 'Refinar detalles con base en la práctica y extender el alcance.', num: 80, icon: ic[2] },
+            { label: '4. Consolidación', value: 'Sostener los resultados y revisar nuevos hitos de mejora.', num: 100, icon: ic[5] }
           ]
         },
         {
           layout: 'closing',
-          tag: 'CONCLUSIÓN Y ACCIÓN',
-          title: 'Próximos Pasos Recomendados',
-          subtitle: purp.slice(0, 110),
+          tag: 'COMPROMISO Y SIGUIENTE PASO',
+          title: `Impulsando ${shortT} Hacia Adelante`,
+          subtitle: purp.slice(0, 115),
           items: [
-            { label: 'Validar Alcance', value: 'Confirmar prioridades y criterios de éxito con los responsables.', num: 100, icon: ic[2] },
-            { label: 'Asignar Roles', value: 'Definir encargados claros y hitos semanales de avance.', num: 100, icon: ic[4] },
-            { label: 'Iniciar Acción', value: 'Ejecutar el primer paso operativo de inmediato.', num: 100, icon: ic[1] }
+            { label: 'Decisión Clave', value: 'Aprobar el rumbo inicial y los puntos de control prioritarios.', num: 100, icon: ic[2] },
+            { label: 'Responsabilidad Clara', value: 'Asignar roles visibles y tiempos concretos de seguimiento.', num: 100, icon: ic[4] },
+            { label: 'Primer Paso Hoy', value: 'Activar la primera acción práctica para generar impulso real.', num: 100, icon: ic[1] }
           ]
         }
       ];
@@ -1143,39 +1150,39 @@ Incluye "visual_story" y variedad de layouts ("cover", "visual_story", "funnel",
         {
           layout: 'donut',
           tag: 'BALANCE DE RECURSOS',
-          title: 'Distribución Óptima de Esfuerzo',
-          subtitle: 'Proporción recomendada para mantener equilibrio y calidad.',
+          title: `Asignación Saludable de Esfuerzos`,
+          subtitle: 'Reparto equilibrado para avanzar sin saturar al equipo.',
           items: [
-            { label: 'Ejecución Clave', value: 'Actividades centrales de mayor impacto', num: 45, icon: ic[1] },
-            { label: 'Preparación y Apoyo', value: 'Formación, documentación y coordinación', num: 30, icon: ic[0] },
-            { label: 'Evaluación y Mejora', value: 'Revisión periódica y ajustes finos', num: 25, icon: ic[5] }
+            { label: 'Acción y Entrega', value: 'Ejecución directa de las prioridades principales', num: 45, icon: ic[1] },
+            { label: 'Preparación y Apoyo', value: 'Guías, formación y coordinación oportuna', num: 30, icon: ic[0] },
+            { label: 'Revisión y Mejora', value: 'Aprendizaje continuo y ajustes de calidad', num: 25, icon: ic[5] }
           ]
         },
         {
           layout: 'gauges',
-          tag: 'NIVEL DE PREPARACIÓN',
-          title: 'Factores Críticos de Éxito',
-          subtitle: 'Condiciones que aseguran una ejecución fluida y sostenida.',
+          tag: 'FACTORES DE ÉXITO',
+          title: `Condiciones que Favorecen el Avance`,
+          subtitle: 'Elementos clave que fortalecen la confianza y el resultado final.',
           items: [
-            { label: 'Claridad de Metas', value: 'Objetivos comprensibles y medibles', num: 88, icon: ic[2] },
-            { label: 'Coordinación', value: 'Comunicación constante entre partes', num: 79, icon: ic[4] },
-            { label: 'Seguimiento', value: 'Revisiones puntuales basadas en hechos', num: 85, icon: ic[3] }
+            { label: 'Enfoque Compartido', value: 'Todos comprenden el para qué de cada paso', num: 90, icon: ic[2] },
+            { label: 'Comunicación Abierta', value: 'Canales claros para resolver dudas a tiempo', num: 84, icon: ic[4] },
+            { label: 'Seguimiento Constructivo', value: 'Medición enfocada en mejorar, no en señalar', num: 88, icon: ic[3] }
           ]
         }
       ];
 
       let eIdx = 0;
       while (slides.length < count) {
-        const template = JSON.parse(JSON.stringify(extraPool[eIdx % extraPool.length]));
-        template.title = `${template.title} (${shortTopic})`;
-        slides.splice(slides.length - 1, 0, template);
+        const tpl = JSON.parse(JSON.stringify(extraPool[eIdx % extraPool.length]));
+        tpl.title = `${tpl.title} — ${shortT}`;
+        slides.splice(slides.length - 1, 0, tpl);
         eIdx++;
       }
 
-      return { title: topic, slides: slides.slice(0, count) };
+      return { title: cleanTopic, slides: slides.slice(0, count) };
     }
 
-    // Ilustraciones Vectoriales Temáticas SVG según el Dominio y el Contenido
+    // Ilustraciones Vectoriales Temáticas Detalladas SVG
     function buildTopicIllustrationSVG(domain, layout, theme) {
       const a1 = theme.accent;
       const a2 = theme.accent2;
@@ -1187,27 +1194,27 @@ Incluye "visual_story" y variedad de layouts ("cover", "visual_story", "funnel",
         return `
           <svg viewBox="0 0 380 280" class="w-full h-full anim-visual" style="--delay:160ms;">
             <defs>
-              <linearGradient id="techGrad" x1="0" y1="0" x2="1" y2="1">
-                <stop offset="0%" stop-color="${a1}" stop-opacity="0.28"/>
-                <stop offset="100%" stop-color="${a2}" stop-opacity="0.12"/>
+              <linearGradient id="techBg" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="${a1}" stop-opacity="0.24"/>
+                <stop offset="100%" stop-color="${a2}" stop-opacity="0.10"/>
               </linearGradient>
             </defs>
-            <rect x="24" y="24" width="332" height="232" rx="20" fill="url(#techGrad)" stroke="${a1}" stroke-opacity="0.35" stroke-width="1.5"/>
-            <!-- Nodos de red / arquitectura -->
-            <line x1="95" y1="90" x2="190" y2="140" stroke="${a1}" stroke-width="2.5" stroke-dasharray="6 4" class="anim-svg-stroke" style="--dash-len:220;--dash-target:0;--delay:220ms;"/>
-            <line x1="285" y1="90" x2="190" y2="140" stroke="${a2}" stroke-width="2.5" stroke-dasharray="6 4" class="anim-svg-stroke" style="--dash-len:220;--dash-target:0;--delay:260ms;"/>
-            <line x1="190" y1="140" x2="190" y2="205" stroke="${a1}" stroke-width="2.5" class="anim-svg-stroke" style="--dash-len:120;--dash-target:0;--delay:300ms;"/>
-            <!-- Núcleo central -->
-            <circle cx="190" cy="140" r="34" fill="${card}" stroke="${a1}" stroke-width="3" class="anim-float"/>
-            <rect x="176" y="126" width="28" height="28" rx="6" fill="${a1}" opacity="0.22"/>
-            <circle cx="190" cy="140" r="8" fill="${a1}"/>
-            <!-- Nodos periféricos -->
-            <rect x="55" y="62" width="80" height="44" rx="12" fill="${card}" stroke="${a1}" stroke-opacity="0.6"/>
-            <text x="95" y="88" text-anchor="middle" fill="${txt}" font-size="11" font-weight="700" font-family="Inter, sans-serif">DATOS</text>
-            <rect x="245" y="62" width="80" height="44" rx="12" fill="${card}" stroke="${a2}" stroke-opacity="0.6"/>
-            <text x="285" y="88" text-anchor="middle" fill="${txt}" font-size="11" font-weight="700" font-family="Inter, sans-serif">MODELO</text>
-            <rect x="135" y="196" width="110" height="40" rx="12" fill="${card}" stroke="${a1}" stroke-opacity="0.6"/>
-            <text x="190" y="220" text-anchor="middle" fill="${a1}" font-size="11" font-weight="800" font-family="Inter, sans-serif">SALIDA ÁGIL</text>
+            <rect x="20" y="20" width="340" height="240" rx="22" fill="url(#techBg)" stroke="${a1}" stroke-opacity="0.35" stroke-width="1.5"/>
+            <line x1="95" y1="92" x2="190" y2="140" stroke="${a1}" stroke-width="2.5" stroke-dasharray="6 4" class="anim-svg-stroke" style="--dash-len:220;--dash-target:0;--delay:220ms;"/>
+            <line x1="285" y1="92" x2="190" y2="140" stroke="${a2}" stroke-width="2.5" stroke-dasharray="6 4" class="anim-svg-stroke" style="--dash-len:220;--dash-target:0;--delay:260ms;"/>
+            <line x1="190" y1="140" x2="190" y2="196" stroke="${a1}" stroke-width="2.5" class="anim-svg-stroke" style="--dash-len:120;--dash-target:0;--delay:300ms;"/>
+            <circle cx="190" cy="140" r="36" fill="${card}" stroke="${a1}" stroke-width="3" class="anim-float"/>
+            <rect x="175" y="125" width="30" height="30" rx="7" fill="${a1}" opacity="0.22"/>
+            <circle cx="190" cy="140" r="8.5" fill="${a1}"/>
+            <rect x="52" y="62" width="86" height="46" rx="12" fill="${card}" stroke="${a1}" stroke-opacity="0.65"/>
+            <text x="95" y="82" text-anchor="middle" fill="${a1}" font-size="10" font-weight="800" font-family="Inter, sans-serif">DATOS</text>
+            <text x="95" y="97" text-anchor="middle" fill="${txt}" font-size="10.5" font-weight="600" font-family="Inter, sans-serif">Confiables</text>
+            <rect x="242" y="62" width="86" height="46" rx="12" fill="${card}" stroke="${a2}" stroke-opacity="0.65"/>
+            <text x="285" y="82" text-anchor="middle" fill="${a2}" font-size="10" font-weight="800" font-family="Inter, sans-serif">MOTOR</text>
+            <text x="285" y="97" text-anchor="middle" fill="${txt}" font-size="10.5" font-weight="600" font-family="Inter, sans-serif">Inteligente</text>
+            <rect x="128" y="192" width="124" height="36" rx="11" fill="${card}" stroke="${a1}" stroke-opacity="0.6"/>
+            <text x="190" y="214" text-anchor="middle" fill="${txt}" font-size="11" font-weight="800" font-family="Inter, sans-serif">IMPACTO REAL</text>
+            <text x="190" y="246" text-anchor="middle" fill="${mut}" font-size="10.5" font-weight="600" font-family="Inter, sans-serif">Arquitectura Escalable y Segura</text>
           </svg>
         `;
       }
@@ -1215,19 +1222,18 @@ Incluye "visual_story" y variedad de layouts ("cover", "visual_story", "funnel",
       if (domain === 'education') {
         return `
           <svg viewBox="0 0 380 280" class="w-full h-full anim-visual" style="--delay:160ms;">
-            <rect x="24" y="24" width="332" height="232" rx="20" fill="${card}" opacity="0.72"/>
-            <!-- Libro abierto estilizado -->
-            <path d="M190 88 C155 68, 95 72, 65 86 L65 196 C95 182, 155 178, 190 198 C225 178, 285 182, 315 196 L315 86 C285 72, 225 68, 190 88 Z"
+            <rect x="20" y="20" width="340" height="240" rx="22" fill="${card}" opacity="0.78"/>
+            <path d="M190 92 C152 70, 92 74, 62 88 L62 198 C92 184, 152 180, 190 200 C228 180, 288 184, 318 198 L318 88 C288 74, 228 70, 190 92 Z"
               fill="${theme.bg}" stroke="${a1}" stroke-width="2.5"/>
-            <line x1="190" y1="88" x2="190" y2="198" stroke="${a1}" stroke-width="2.5"/>
-            <line x1="92" y1="112" x2="162" y2="106" stroke="${mut}" stroke-width="3" stroke-linecap="round"/>
-            <line x1="92" y1="134" x2="154" y2="128" stroke="${mut}" stroke-width="3" stroke-linecap="round" opacity="0.7"/>
-            <line x1="218" y1="112" x2="288" y2="106" stroke="${a2}" stroke-width="3" stroke-linecap="round"/>
-            <line x1="218" y1="134" x2="276" y2="128" stroke="${a2}" stroke-width="3" stroke-linecap="round" opacity="0.7"/>
-            <!-- Insignia superior -->
-            <circle cx="190" cy="56" r="16" fill="${a1}" opacity="0.22" class="anim-float"/>
-            <circle cx="190" cy="56" r="7" fill="${a1}"/>
-            <text x="190" y="232" text-anchor="middle" fill="${txt}" font-size="12" font-weight="700" font-family="Inter, sans-serif">APRENDIZAJE Y ACOMPAÑAMIENTO</text>
+            <line x1="190" y1="92" x2="190" y2="200" stroke="${a1}" stroke-width="2.5"/>
+            <line x1="88" y1="114" x2="162" y2="108" stroke="${mut}" stroke-width="3" stroke-linecap="round"/>
+            <line x1="88" y1="136" x2="152" y2="130" stroke="${mut}" stroke-width="3" stroke-linecap="round" opacity="0.7"/>
+            <line x1="88" y1="158" x2="144" y2="152" stroke="${a1}" stroke-width="3" stroke-linecap="round"/>
+            <line x1="218" y1="114" x2="292" y2="108" stroke="${a2}" stroke-width="3" stroke-linecap="round"/>
+            <line x1="218" y1="136" x2="280" y2="130" stroke="${a2}" stroke-width="3" stroke-linecap="round" opacity="0.7"/>
+            <circle cx="190" cy="54" r="17" fill="${a1}" opacity="0.22" class="anim-float"/>
+            <circle cx="190" cy="54" r="7.5" fill="${a1}"/>
+            <text x="190" y="232" text-anchor="middle" fill="${txt}" font-size="11.5" font-weight="700" font-family="Inter, sans-serif">CRECIMIENTO, CLARIDAD Y BIENESTAR</text>
           </svg>
         `;
       }
@@ -1235,15 +1241,14 @@ Incluye "visual_story" y variedad de layouts ("cover", "visual_story", "funnel",
       if (domain === 'marketing') {
         return `
           <svg viewBox="0 0 380 280" class="w-full h-full anim-visual" style="--delay:160ms;">
-            <rect x="24" y="24" width="332" height="232" rx="20" fill="${card}" opacity="0.72"/>
-            <!-- Cohete / crecimiento ascendente -->
-            <path d="M80 205 Q175 185 265 82" fill="none" stroke="${a1}" stroke-width="3.5" stroke-dasharray="8 5" class="anim-svg-stroke" style="--dash-len:320;--dash-target:0;--delay:200ms;"/>
-            <polygon points="255,72 286,66 276,97" fill="${a1}" class="anim-float"/>
-            <rect x="76" y="156" width="32" height="48" rx="6" fill="${a2}" opacity="0.75" class="anim-svg-bar" style="--delay:180ms;"/>
-            <rect x="124" y="132" width="32" height="72" rx="6" fill="${a1}" opacity="0.85" class="anim-svg-bar" style="--delay:260ms;"/>
-            <rect x="172" y="104" width="32" height="100" rx="6" fill="${a2}" class="anim-svg-bar" style="--delay:340ms;"/>
-            <rect x="220" y="78" width="32" height="126" rx="6" fill="${a1}" class="anim-svg-bar" style="--delay:420ms;"/>
-            <text x="190" y="234" text-anchor="middle" fill="${txt}" font-size="12" font-weight="700" font-family="Inter, sans-serif">TRACCIÓN Y CONVERSIÓN</text>
+            <rect x="20" y="20" width="340" height="240" rx="22" fill="${card}" opacity="0.78"/>
+            <path d="M78 202 Q175 182 268 78" fill="none" stroke="${a1}" stroke-width="3.5" stroke-dasharray="8 5" class="anim-svg-stroke" style="--dash-len:320;--dash-target:0;--delay:200ms;"/>
+            <polygon points="258,68 290,62 280,94" fill="${a1}" class="anim-float"/>
+            <rect x="74" y="156" width="34" height="48" rx="7" fill="${a2}" opacity="0.75" class="anim-svg-bar" style="--delay:180ms;"/>
+            <rect x="124" y="130" width="34" height="74" rx="7" fill="${a1}" opacity="0.85" class="anim-svg-bar" style="--delay:260ms;"/>
+            <rect x="174" y="102" width="34" height="102" rx="7" fill="${a2}" class="anim-svg-bar" style="--delay:340ms;"/>
+            <rect x="224" y="76" width="34" height="128" rx="7" fill="${a1}" class="anim-svg-bar" style="--delay:420ms;"/>
+            <text x="190" y="232" text-anchor="middle" fill="${txt}" font-size="11.5" font-weight="700" font-family="Inter, sans-serif">ATRACCIÓN, VALOR Y CONVERSIÓN</text>
           </svg>
         `;
       }
@@ -1251,41 +1256,37 @@ Incluye "visual_story" y variedad de layouts ("cover", "visual_story", "funnel",
       if (domain === 'editorial') {
         return `
           <svg viewBox="0 0 380 280" class="w-full h-full anim-visual" style="--delay:160ms;">
-            <rect x="24" y="24" width="332" height="232" rx="20" fill="${card}" opacity="0.72"/>
-            <!-- Brújula / horizonte -->
-            <circle cx="190" cy="132" r="62" fill="${theme.bg}" stroke="${a1}" stroke-width="2.5"/>
-            <circle cx="190" cy="132" r="46" fill="none" stroke="${a2}" stroke-width="1.2" stroke-dasharray="4 4"/>
-            <polygon points="190,82 201,132 190,144 179,132" fill="${a1}" class="anim-float"/>
-            <polygon points="190,182 201,132 190,120 179,132" fill="${a2}" opacity="0.8"/>
-            <circle cx="190" cy="132" r="6" fill="${txt}"/>
-            <text x="190" y="226" text-anchor="middle" fill="${txt}" font-size="12" font-weight="700" font-family="Playfair Display, serif">RUMBO, CRITERIO Y PROPÓSITO</text>
+            <rect x="20" y="20" width="340" height="240" rx="22" fill="${card}" opacity="0.78"/>
+            <circle cx="190" cy="130" r="64" fill="${theme.bg}" stroke="${a1}" stroke-width="2.5"/>
+            <circle cx="190" cy="130" r="46" fill="none" stroke="${a2}" stroke-width="1.3" stroke-dasharray="4 4"/>
+            <polygon points="190,78 202,130 190,143 178,130" fill="${a1}" class="anim-float"/>
+            <polygon points="190,182 202,130 190,117 178,130" fill="${a2}" opacity="0.85"/>
+            <circle cx="190" cy="130" r="6" fill="${txt}"/>
+            <text x="190" y="228" text-anchor="middle" fill="${txt}" font-size="12" font-weight="700" font-family="Playfair Display, serif">RUMBO CLARO Y LIDERAZGO CON SENTIDO</text>
           </svg>
         `;
       }
 
-      // Negocios / Estrategia
       return `
         <svg viewBox="0 0 380 280" class="w-full h-full anim-visual" style="--delay:160ms;">
-          <rect x="24" y="24" width="332" height="232" rx="20" fill="${card}" opacity="0.72"/>
-          <!-- Diana estratégica / objetivos -->
-          <circle cx="135" cy="138" r="64" fill="none" stroke="${a1}" stroke-width="2.5" opacity="0.35"/>
-          <circle cx="135" cy="138" r="42" fill="none" stroke="${a2}" stroke-width="2.5" opacity="0.65"/>
-          <circle cx="135" cy="138" r="20" fill="${a1}" opacity="0.25"/>
-          <circle cx="135" cy="138" r="8" fill="${a1}"/>
-          <line x1="215" y1="88" x2="322" y2="88" stroke="${a1}" stroke-width="4" stroke-linecap="round"/>
-          <line x1="215" y1="118" x2="302" y2="118" stroke="${mut}" stroke-width="3" stroke-linecap="round"/>
-          <rect x="215" y="148" width="108" height="54" rx="12" fill="${theme.bg}" stroke="${a2}" stroke-opacity="0.5"/>
-          <text x="269" y="172" text-anchor="middle" fill="${a1}" font-size="15" font-weight="800" font-family="Inter, sans-serif">ENFOQUE</text>
-          <text x="269" y="190" text-anchor="middle" fill="${mut}" font-size="10.5" font-weight="600" font-family="Inter, sans-serif">Alta Precisión</text>
-          <text x="190" y="234" text-anchor="middle" fill="${txt}" font-size="12" font-weight="700" font-family="Inter, sans-serif">ESTRATEGIA Y EJECUCIÓN</text>
+          <rect x="20" y="20" width="340" height="240" rx="22" fill="${card}" opacity="0.78"/>
+          <circle cx="132" cy="134" r="64" fill="none" stroke="${a1}" stroke-width="2.5" opacity="0.35"/>
+          <circle cx="132" cy="134" r="42" fill="none" stroke="${a2}" stroke-width="2.5" opacity="0.65"/>
+          <circle cx="132" cy="134" r="20" fill="${a1}" opacity="0.25"/>
+          <circle cx="132" cy="134" r="8" fill="${a1}"/>
+          <line x1="212" y1="84" x2="324" y2="84" stroke="${a1}" stroke-width="4" stroke-linecap="round"/>
+          <line x1="212" y1="112" x2="304" y2="112" stroke="${mut}" stroke-width="3" stroke-linecap="round"/>
+          <rect x="212" y="142" width="112" height="56" rx="12" fill="${theme.bg}" stroke="${a2}" stroke-opacity="0.55"/>
+          <text x="268" y="166" text-anchor="middle" fill="${a1}" font-size="14" font-weight="800" font-family="Inter, sans-serif">IMPULSO</text>
+          <text x="268" y="185" text-anchor="middle" fill="${mut}" font-size="10.5" font-weight="600" font-family="Inter, sans-serif">Metas Alcanzables</text>
+          <text x="190" y="232" text-anchor="middle" fill="${txt}" font-size="11.5" font-weight="700" font-family="Inter, sans-serif">ESTRATEGIA Y RESULTADOS SOSTENIBLES</text>
         </svg>
       `;
     }
 
-    // Gráficos SVG Variados con Animación
     function buildBarChartSVG(items, theme) {
       const bars = items.slice(0, 4).map((it, i) => {
-        const val = Math.min(100, Math.max(12, Number(it.num) || 65));
+        const val = Math.min(100, Math.max(12, Number(it.num) || 75));
         const y = 14 + i * 62;
         const barW = Math.round((val / 100) * 265);
         return `
@@ -1332,9 +1333,9 @@ Incluye "visual_story" y variedad de layouts ("cover", "visual_story", "funnel",
       const sliceItems = items.slice(0, 4);
       const colors = [theme.accent, theme.accent2, '#34d399', '#fbbf24'];
       const rows = sliceItems.map((it, i) => {
-        const pct = Math.min(100, Math.max(22, Number(it.num) || (90 - i * 18)));
+        const pct = Math.min(100, Math.max(24, Number(it.num) || (90 - i * 16)));
         const topW = Math.round((pct / 100) * 340);
-        const botW = Math.max(80, Math.round(topW * 0.78));
+        const botW = Math.max(88, Math.round(topW * 0.78));
         const y = 12 + i * 60;
         const xTopL = (360 - topW) / 2;
         const xTopR = xTopL + topW;
@@ -1343,7 +1344,7 @@ Incluye "visual_story" y variedad de layouts ("cover", "visual_story", "funnel",
         const points = `${xTopL},${y} ${xTopR},${y} ${xBotR},${y + 46} ${xBotL},${y + 46}`;
         return `
           <g class="anim-card" style="--delay:${140 + i * 120}ms;">
-            <polygon points="${points}" rx="8" fill="${colors[i % colors.length]}" opacity="0.9"/>
+            <polygon points="${points}" rx="8" fill="${colors[i % colors.length]}" opacity="0.92"/>
             <text x="180" y="${y + 21}" text-anchor="middle" fill="#0f172a" font-size="12" font-weight="800" font-family="Inter, sans-serif">${escapeHtml((it.label || '').slice(0, 24))}</text>
             <text x="180" y="${y + 37}" text-anchor="middle" fill="#0f172a" font-size="11" font-weight="700" font-family="Inter, sans-serif">${pct}%</text>
           </g>
@@ -1355,7 +1356,7 @@ Incluye "visual_story" y variedad de layouts ("cover", "visual_story", "funnel",
     function buildTrendAreaSVG(items, theme) {
       const ptsData = items.slice(0, 4);
       const coords = ptsData.map((it, i) => {
-        const val = Math.min(100, Math.max(15, Number(it.num) || 60));
+        const val = Math.min(100, Math.max(18, Number(it.num) || 70));
         const x = 45 + i * 95;
         const y = 195 - (val / 100) * 145;
         return { x, y, val, label: it.label || `P${i + 1}` };
@@ -1388,7 +1389,7 @@ Incluye "visual_story" y variedad de layouts ("cover", "visual_story", "funnel",
     }
 
     function buildGaugeSVG(num, label, theme, idx) {
-      const val = Math.min(100, Math.max(10, Number(num) || 75));
+      const val = Math.min(100, Math.max(15, Number(num) || 80));
       const r = 46;
       const circ = 2 * Math.PI * r;
       const targetOffset = circ - (val / 100) * circ;
@@ -1659,7 +1660,6 @@ Incluye "visual_story" y variedad de layouts ("cover", "visual_story", "funnel",
         `;
       }
 
-      // Timeline / Closing
       const cols = Math.min(4, Math.max(2, (slide.items || []).length));
       return `
         <div class="w-full h-full flex flex-col justify-between" style="color:${theme.text};">
@@ -1780,11 +1780,13 @@ Incluye "visual_story" y variedad de layouts ("cover", "visual_story", "funnel",
       if (Math.abs(diff) > 45) diff < 0 ? nextSlide() : prevSlide();
     }, { passive: true });
 
-    // Convierte un string SVG en data URL PNG para insertarlo fielmente en .pptx
-    function svgStringToPngDataUrl(svgString, width = 760, height = 560) {
+    // Convierte SVG en PNG de alta resolución y asegura que el estado final quede visible al renderizar
+    function svgStringToPngDataUrl(svgString, width = 920, height = 680) {
       return new Promise((resolve) => {
         try {
-          const cleanSvg = svgString.replace(/class="[^"]*"/g, '').replace(/style="[^"]*"/g, '');
+          const cleanSvg = svgString
+            .replace(/class="[^"]*"/g, '')
+            .replace(/style="[^"]*"/g, '');
           const blob = new Blob([cleanSvg], { type: 'image/svg+xml;charset=utf-8' });
           const url = URL.createObjectURL(blob);
           const img = new Image();
@@ -1841,10 +1843,9 @@ Incluye "visual_story" y variedad de layouts ("cover", "visual_story", "funnel",
       showToast(`Descargando ${suggestedName}...`);
     }
 
-    // Exportar a PowerPoint (.pptx) manteniendo gráficos, ilustraciones y textos fieles
     async function exportToPPTX() {
       closeExportModal();
-      showToast('Generando PowerPoint idéntico al diseño (.pptx)...');
+      showToast('Generando PowerPoint (.pptx) con ilustraciones y gráficos...');
 
       const pptx = new PptxGenJS();
       pptx.layout = 'LAYOUT_16x9';
@@ -1869,17 +1870,17 @@ Incluye "visual_story" y variedad de layouts ("cover", "visual_story", "funnel",
 
         if (s.layout === 'cover') {
           slide.addText(s.title, {
-            x: 0.6, y: 1.1, w: 5.3, h: 1.4,
+            x: 0.6, y: 1.08, w: 5.3, h: 1.4,
             fontSize: 28, bold: true, color: t.pptText, fontFace: 'Arial', valign: 'middle'
           });
           slide.addText(s.subtitle || '', {
-            x: 0.6, y: 2.55, w: 5.2, h: 1.1,
+            x: 0.6, y: 2.52, w: 5.2, h: 1.15,
             fontSize: 13.5, color: 'CBD5E1', fontFace: 'Arial'
           });
 
-          const illPng = await svgStringToPngDataUrl(buildTopicIllustrationSVG(currentDomain, 'cover', t), 760, 560);
+          const illPng = await svgStringToPngDataUrl(buildTopicIllustrationSVG(currentDomain, 'cover', t), 920, 680);
           if (illPng) {
-            slide.addImage({ data: illPng, x: 6.0, y: 0.95, w: 3.4, h: 2.5 });
+            slide.addImage({ data: illPng, x: 5.95, y: 0.92, w: 3.45, h: 2.55 });
           }
 
           (s.items || []).slice(0, 3).forEach((it, i) => {
@@ -1901,12 +1902,12 @@ Incluye "visual_story" y variedad de layouts ("cover", "visual_story", "funnel",
         });
 
         if (s.layout === 'visual_story') {
-          const illPng = await svgStringToPngDataUrl(buildTopicIllustrationSVG(currentDomain, 'visual_story', t), 760, 560);
+          const illPng = await svgStringToPngDataUrl(buildTopicIllustrationSVG(currentDomain, 'visual_story', t), 920, 680);
           if (illPng) {
-            slide.addImage({ data: illPng, x: 0.6, y: 1.92, w: 3.7, h: 2.85 });
+            slide.addImage({ data: illPng, x: 0.6, y: 1.9, w: 3.7, h: 2.88 });
           }
           (s.items || []).slice(0, 3).forEach((it, i) => {
-            const yPos = 1.92 + i * 1.02;
+            const yPos = 1.9 + i * 1.02;
             slide.addShape(pptx.ShapeType.roundRect, { x: 4.5, y: yPos, w: 4.9, h: 0.9, fill: { color: t.pptCard }, rectRadius: 0.08 });
             slide.addText(it.label || '', { x: 4.68, y: yPos + 0.08, w: 4.55, h: 0.28, fontSize: 11.5, bold: true, color: t.pptAccent });
             slide.addText(it.value || '', { x: 4.68, y: yPos + 0.38, w: 4.55, h: 0.44, fontSize: 10, color: t.pptText });
@@ -1921,16 +1922,16 @@ Incluye "visual_story" y variedad de layouts ("cover", "visual_story", "funnel",
           else if (s.layout === 'trend_area') chartSvg = buildTrendAreaSVG(s.items || [], t);
           else chartSvg = buildBarChartSVG(s.items || [], t);
 
-          const chartPng = await svgStringToPngDataUrl(chartSvg, 720, 540);
+          const chartPng = await svgStringToPngDataUrl(chartSvg, 880, 640);
           if (chartPng) {
-            slide.addShape(pptx.ShapeType.roundRect, { x: 0.6, y: 1.95, w: 4.55, h: 3.1, fill: { color: t.pptCard }, rectRadius: 0.08 });
-            slide.addImage({ data: chartPng, x: 0.72, y: 2.05, w: 4.3, h: 2.9 });
+            slide.addShape(pptx.ShapeType.roundRect, { x: 0.6, y: 1.92, w: 4.55, h: 3.12, fill: { color: t.pptCard }, rectRadius: 0.08 });
+            slide.addImage({ data: chartPng, x: 0.72, y: 2.02, w: 4.3, h: 2.92 });
           }
 
           (s.items || []).slice(0, 4).forEach((it, i) => {
-            const yPos = 1.95 + i * 0.78;
+            const yPos = 1.92 + i * 0.79;
             slide.addShape(pptx.ShapeType.roundRect, { x: 5.35, y: yPos, w: 4.05, h: 0.68, fill: { color: t.pptCard }, rectRadius: 0.06 });
-            slide.addText(`${it.label || ''} (${it.num || 50}%)`, { x: 5.5, y: yPos + 0.06, w: 3.75, h: 0.25, fontSize: 11, bold: true, color: t.pptAccent });
+            slide.addText(`${it.label || ''} (${it.num || 75}%)`, { x: 5.5, y: yPos + 0.06, w: 3.75, h: 0.25, fontSize: 11, bold: true, color: t.pptAccent });
             slide.addText(it.value || '', { x: 5.5, y: yPos + 0.32, w: 3.75, h: 0.3, fontSize: 9.5, color: t.pptText });
           });
         } else {
@@ -1939,15 +1940,15 @@ Incluye "visual_story" y variedad de layouts ("cover", "visual_story", "funnel",
           for (let i = 0; i < items.length; i++) {
             const it = items[i];
             const xPos = 0.6 + i * 3.0;
-            slide.addShape(pptx.ShapeType.roundRect, { x: xPos, y: 2.05, w: colW, h: 2.98, fill: { color: t.pptCard }, rectRadius: 0.08 });
+            slide.addShape(pptx.ShapeType.roundRect, { x: xPos, y: 2.02, w: colW, h: 3.0, fill: { color: t.pptCard }, rectRadius: 0.08 });
             if (s.layout === 'gauges') {
-              const gPng = await svgStringToPngDataUrl(buildGaugeSVG(it.num, it.label, t, i), 240, 240);
-              if (gPng) slide.addImage({ data: gPng, x: xPos + 0.92, y: 2.15, w: 0.95, h: 0.95 });
-              slide.addText(it.label || '', { x: xPos + 0.15, y: 3.15, w: colW - 0.3, h: 0.35, align: 'center', fontSize: 12.5, bold: true, color: t.pptAccent });
-              slide.addText(it.value || '', { x: xPos + 0.15, y: 3.52, w: colW - 0.3, h: 1.35, align: 'center', fontSize: 10.5, color: t.pptText, valign: 'top' });
+              const gPng = await svgStringToPngDataUrl(buildGaugeSVG(it.num, it.label, t, i), 280, 280);
+              if (gPng) slide.addImage({ data: gPng, x: xPos + 0.92, y: 2.12, w: 0.96, h: 0.96 });
+              slide.addText(it.label || '', { x: xPos + 0.15, y: 3.14, w: colW - 0.3, h: 0.35, align: 'center', fontSize: 12.5, bold: true, color: t.pptAccent });
+              slide.addText(it.value || '', { x: xPos + 0.15, y: 3.5, w: colW - 0.3, h: 1.38, align: 'center', fontSize: 10.5, color: t.pptText, valign: 'top' });
             } else {
-              slide.addText(it.label || '', { x: xPos + 0.18, y: 2.25, w: colW - 0.36, h: 0.45, fontSize: 13.5, bold: true, color: t.pptAccent });
-              slide.addText(it.value || '', { x: xPos + 0.18, y: 2.8, w: colW - 0.36, h: 2.0, fontSize: 11, color: t.pptText, valign: 'top' });
+              slide.addText(it.label || '', { x: xPos + 0.18, y: 2.22, w: colW - 0.36, h: 0.45, fontSize: 13.5, bold: true, color: t.pptAccent });
+              slide.addText(it.value || '', { x: xPos + 0.18, y: 2.78, w: colW - 0.36, h: 2.02, fontSize: 11, color: t.pptText, valign: 'top' });
             }
           }
         }
@@ -1983,9 +1984,10 @@ Incluye "visual_story" y variedad de layouts ("cover", "visual_story", "funnel",
 <style>
   ${animCss}
   body { margin:0; background:#050811; display:flex; align-items:center; justify-content:center; min-height:100vh; overflow:hidden; font-family:system-ui,sans-serif; }
-  .slide { width:960px; height:540px; padding:36px 46px; flex-direction:column; justify-content:space-between; box-sizing:border-box; border-radius:14px; overflow:hidden; }
-  .controls { position:fixed; bottom:16px; background:rgba(15,23,42,.9); padding:8px 18px; border-radius:999px; color:#fff; display:flex; gap:14px; align-items:center; font-size:13px; border:1px solid #334155; }
+  .slide { width:960px; height:540px; padding:34px 44px; flex-direction:column; justify-content:space-between; box-sizing:border-box; border-radius:14px; overflow:hidden; }
+  .controls { position:fixed; bottom:16px; background:rgba(15,23,42,.92); padding:8px 18px; border-radius:999px; color:#fff; display:flex; gap:12px; align-items:center; font-size:13px; border:1px solid #334155; }
   button { background:#38bdf8; color:#0f172a; border:none; padding:5px 12px; border-radius:999px; font-weight:700; cursor:pointer; }
+  button.sec { background:#1e293b; color:#f8fafc; border:1px solid #475569; }
 </style>
 </head>
 <body>
@@ -1994,13 +1996,14 @@ ${slidesMarkup}
   <button onclick="nav(-1)">Anterior</button>
   <span id="cnt">1 / ${deck.slides.length}</span>
   <button onclick="nav(1)">Siguiente</button>
+  <button class="sec" onclick="replay()">Animar</button>
 </div>
 <script>
   lucide.createIcons();
   let idx = 0; const slides = document.querySelectorAll('.slide');
-  function nav(d){
+  function showSlide(targetIdx){
     slides[idx].style.display='none';
-    idx=(idx+d+slides.length)%slides.length;
+    idx=(targetIdx+slides.length)%slides.length;
     const active = slides[idx];
     active.style.display='flex';
     const html = active.innerHTML;
@@ -2010,20 +2013,22 @@ ${slidesMarkup}
     lucide.createIcons();
     document.getElementById('cnt').textContent=(idx+1)+' / '+slides.length;
   }
+  function nav(d){ showSlide(idx+d); }
+  function replay(){ showSlide(idx); }
   document.addEventListener('keydown', e => { if(e.key==='ArrowRight') nav(1); if(e.key==='ArrowLeft') nav(-1); });
 <\/script>
 </body></html>`;
 
       const blob = new Blob([htmlDoc], { type: 'text/html;charset=utf-8' });
       const safeName = (deck.title || 'Presentacion').replace(/[^a-zA-Z0-9áéíóúÁÉÍÓÚñÑ_-]/g, '_').slice(0, 40);
-      await saveFileWithLocation(blob, `${safeName}_Identica.html`, 'text/html', 'Presentación Web HTML', '.html');
+      await saveFileWithLocation(blob, `${safeName}_Animada.html`, 'text/html', 'Presentación Web HTML', '.html');
     }
 
     function exportToPDF() {
       closeExportModal();
       const printBox = document.getElementById('printContainer');
       printBox.innerHTML = deck.slides.map((s, i) => `
-        <div class="print-page" style="background:${currentTheme.bg}; padding:36px 46px; display:flex; flex-direction:column; justify-content:space-between;">
+        <div class="print-page" style="background:${currentTheme.bg}; padding:34px 44px; display:flex; flex-direction:column; justify-content:space-between;">
           ${renderSlideHTML(s, i, deck.slides.length, currentTheme, false)}
         </div>
       `).join('');

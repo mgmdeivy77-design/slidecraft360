@@ -1,4 +1,4 @@
-const CACHE_NAME = 'slidecraft-ai-v3';
+const CACHE_NAME = 'slidecraft-ai-v4';
 const ASSETS = [
   './',
   './index.html',

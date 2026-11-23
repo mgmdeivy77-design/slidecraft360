@@ -1,7 +1,7 @@
 {
   "name": "SlideCraft AI — Estudio de Presentaciones",
   "short_name": "SlideCraft AI",
-  "description": "PWA con imágenes temáticas, iconos, gráficos animados, guardado local y exportación fiel (.pptx, .html, .pdf).",
+  "description": "PWA con contenido optimista y congruente, ilustraciones temáticas, iconos, gráficos animados y exportación fiel.",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
