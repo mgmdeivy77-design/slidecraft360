@@ -1,18 +1,9 @@
-# SlideCraft AI — PWA Generador de Presentaciones
+# SlideCraft AI — Estudio PWA de Presentaciones
 
-Aplicación Web Progresiva (PWA) optimizada para dispositivos móviles y escritorio que permite crear, editar, presentar y exportar presentaciones profesionales estilo PowerPoint (`.pptx`, `.html` interactivo y `.pdf`).
+Aplicación Web Progresiva (PWA) para crear, guardar, animar, presentar y exportar presentaciones estilo PowerPoint (`.pptx`, `.html` animado y `.pdf`).
 
-## Estructura del Repositorio
-
-- `index.html`: Interfaz principal, motor de renderizado 16:9 anti-desbordamiento, gráficos SVG dinámicos y exportador `.pptx`.
-- `manifest.json`: Configuración de instalación PWA (nombre, colores, iconos y modo *standalone*).
-- `sw.js`: Service Worker para almacenamiento en caché y funcionamiento offline.
-- `icon.svg`: Icono vectorial adaptable para Android, iOS y escritorio.
-
-## Cómo desplegar en GitHub Pages
-
-1. Crea un nuevo repositorio en tu cuenta de GitHub (por ejemplo, `slidecraft-ai`).
-2. Sube todos los archivos de este ZIP (`index.html`, `manifest.json`, `sw.js`, `icon.svg`, `README.md`) a la raíz de la rama `main`.
-3. Ve a **Settings → Pages** en tu repositorio.
-4. En **Source**, selecciona `Deploy from a branch`, elige la rama `main` y la carpeta `/ (root)`, y haz clic en **Save**.
-5. Abre la URL generada desde Chrome en tu celular y pulsa **Instalar App** (o *Añadir a pantalla de inicio*).
+## Funciones Principales
+- **Guardado automático en el dispositivo** con biblioteca para abrir, duplicar, editar o borrar presentaciones.
+- **Formatos adaptativos según el tema** (Estrategia, Tecnología, Educación/Salud, Crecimiento/Ventas, Editorial/Liderazgo).
+- **Gráficos SVG variados** (barras, dona, embudo, curva de área y medidores circulares) con animaciones escalonadas en letras, tarjetas y gráficos.
+- **Exportación a `.pptx`** con selector nativo de carpeta (`showSaveFilePicker`) y respaldo automático.
